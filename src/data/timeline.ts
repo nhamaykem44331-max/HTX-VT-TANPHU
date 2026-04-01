@@ -1,0 +1,81 @@
+import type { TimelineEvent } from "@/lib/types";
+
+export const timeline: TimelineEvent[] = [
+  {
+    year: "1995",
+    title: "Thành lập HTX Vận tải Ô tô Tân Phú",
+    description:
+      "HTX Vận tải Ô tô Tân Phú được thành lập tại Thái Nguyên với 5 thành viên sáng lập và 3 đầu xe tải. Bắt đầu hoạt động vận chuyển hàng hóa tuyến nội tỉnh.",
+    milestone: true,
+  },
+  {
+    year: "2000",
+    title: "Mở rộng đội xe, khai thác tuyến liên tỉnh",
+    description:
+      "Nâng đội xe lên 10 chiếc, mở rộng phạm vi hoạt động ra các tỉnh lân cận Bắc Giang, Bắc Ninh, Hà Nội. Đơn vị đạt danh hiệu HTX tiên tiến cấp tỉnh lần đầu.",
+    milestone: false,
+  },
+  {
+    year: "2005",
+    title: "Đa dạng hóa — Ra mắt dịch vụ Cẩu lắp đặt",
+    description:
+      "HTX đầu tư 3 cần cẩu công nghiệp đầu tiên, mở ra lĩnh vực dịch vụ cẩu và lắp đặt thiết bị. Ký kết hợp đồng dài hạn với các nhà máy khu công nghiệp Thái Nguyên.",
+    milestone: true,
+  },
+  {
+    year: "2008",
+    title: "Trở thành đại lý chính thức thép Hòa Phát",
+    description:
+      "HTX Tân Phú ký kết trở thành đại lý phân phối chính thức thép Hòa Phát tại Thái Nguyên, mở đầu lĩnh vực kinh doanh thép với kho bãi 5.000m².",
+    milestone: false,
+  },
+  {
+    year: "2010",
+    title: "Khai trương Khách sạn Phương Anh",
+    description:
+      "Khách sạn Phương Anh 41 phòng tại số 345 Thống Nhất, Tích Lương chính thức đi vào hoạt động. Mở ra lĩnh vực kinh doanh khách sạn và nhà hàng sự kiện.",
+    milestone: true,
+  },
+  {
+    year: "2015",
+    title: "Nhận Huân chương Lao động — 20 năm phát triển",
+    description:
+      "Kỷ niệm 20 năm thành lập, HTX Tân Phú được Nhà nước trao tặng Huân chương Lao động. Giám đốc Nguyễn Đức Điểm được Thủ tướng khen thưởng cá nhân xuất sắc.",
+    milestone: true,
+  },
+  {
+    year: "2018",
+    title: "Ra mắt đại lý vé máy bay Tân Phú APG",
+    description:
+      "Tân Phú APG trở thành đại lý vé máy bay cấp 1 chính thức tại Thái Nguyên, kết nối GDS Amadeus. Mở thêm chi nhánh tại Hà Nội phục vụ khách hàng khu vực.",
+    milestone: false,
+  },
+  {
+    year: "2020",
+    title: "Đầu tư Wonderland Nha Trang Hotel",
+    description:
+      "HTX mở rộng vào lĩnh vực resort biển với Wonderland Nha Trang Hotel tại đường Phạm Văn Đồng, Nha Trang — đánh dấu bước vươn ra ngoài tỉnh Thái Nguyên.",
+    milestone: true,
+  },
+  {
+    year: "2022",
+    title: "Cờ thi đua Chính phủ — Doanh thu 2.000 tỷ",
+    description:
+      "HTX Tân Phú nhận Cờ thi đua của Thủ tướng Chính phủ. Doanh thu vượt mốc 2.000 tỷ đồng/năm, nhân lực hơn 120 người chính thức và hợp đồng.",
+    milestone: false,
+  },
+  {
+    year: "2023",
+    title: "Cúp vàng Hợp tác vì Cộng đồng Thịnh vượng",
+    description:
+      "Liên minh HTX Việt Nam trao Cúp vàng \"Hợp tác vì cộng đồng thịnh vượng\". Khởi động dự án nông nghiệp hữu cơ 2ha với tiêu chuẩn VietGAP.",
+    milestone: false,
+  },
+  {
+    year: "2025",
+    title: "Kỷ niệm 30 năm — 7 lĩnh vực, 150+ nhân sự",
+    description:
+      "Tổ chức lễ kỷ niệm 30 năm thành lập hoành tráng. HTX Tân Phú hiện diện ở 7 lĩnh vực kinh doanh, doanh thu ~3.000 tỷ/năm, được công nhận HTX Điển hình Tiên tiến 2025.",
+    milestone: true,
+  },
+];

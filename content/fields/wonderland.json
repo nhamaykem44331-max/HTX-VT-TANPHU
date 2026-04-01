@@ -1,0 +1,28 @@
+{
+  "slug": "wonderland",
+  "name": "Wonderland Nha Trang",
+  "icon": "Building2",
+  "shortDesc": "Lô 10-11 Phạm Văn Đồng, Nha Trang",
+  "description": "Wonderland Nha Trang Hotel — khách sạn nghỉ dưỡng biển tại vị trí đắc địa đường Phạm Văn Đồng, Nha Trang. Trải nghiệm nghỉ dưỡng cao cấp bên bờ biển xanh.",
+  "image": "/images/fields/wonderland.jpg",
+  "stats": [
+    { "label": "Địa chỉ", "value": "Lô 10-11 Phạm Văn Đồng" },
+    { "label": "Thành phố", "value": "Nha Trang" },
+    { "label": "Điện thoại", "value": "0258.3551.999" },
+    { "label": "Phong cách", "value": "Resort biển" }
+  ],
+  "features": [
+    "Vị trí đắc địa mặt biển Phạm Văn Đồng",
+    "Hồ bơi view biển panorama",
+    "Nhà hàng hải sản tươi sống",
+    "Spa và khu thư giãn",
+    "Dịch vụ đưa đón sân bay Cam Ranh"
+  ],
+  "services": [
+    "Phòng nghỉ view biển",
+    "Gói nghỉ dưỡng cuối tuần",
+    "Honeymoon package",
+    "Ăn sáng buffet included",
+    "Tour tham quan vịnh Nha Trang"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "slug": "nha-hang-su-kien",
+  "name": "Nhà hàng & Sự kiện",
+  "icon": "UtensilsCrossed",
+  "shortDesc": "~10 sự kiện/tuần, tiệc cưới, hội nghị",
+  "description": "Dịch vụ nhà hàng và tổ chức sự kiện chuyên nghiệp. Trung bình 10 sự kiện mỗi tuần bao gồm tiệc cưới, hội nghị, sinh nhật, liên hoan, với đội ngũ đầu bếp giàu kinh nghiệm.",
+  "image": "/images/fields/nha-hang.jpg",
+  "stats": [
+    { "label": "Sự kiện/tuần", "value": "~10" },
+    { "label": "Sức chứa", "value": "200+ khách" },
+    { "label": "Menu đa dạng", "value": "100+ món" },
+    { "label": "Kinh nghiệm", "value": "15+ năm" }
+  ],
+  "features": [
+    "Đội ngũ đầu bếp 5 sao giàu kinh nghiệm",
+    "Thiết kế tiệc theo yêu cầu riêng",
+    "Hệ thống âm thanh, ánh sáng chuyên nghiệp",
+    "MC, DJ, ban nhạc theo yêu cầu",
+    "Photobooth, trang trí bàn tiệc"
+  ],
+  "services": [
+    "Tiệc cưới trọn gói",
+    "Hội nghị, sự kiện doanh nghiệp",
+    "Tiệc sinh nhật, kỷ niệm",
+    "Buffet theo nhóm",
+    "Catering phục vụ tận nơi"
+  ]
+}

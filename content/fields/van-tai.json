@@ -1,0 +1,28 @@
+{
+  "slug": "van-tai",
+  "name": "Vận tải hàng hóa",
+  "icon": "Truck",
+  "shortDesc": "26 xe tải 1.5–40 tấn, phạm vi toàn quốc",
+  "description": "Dịch vụ vận tải hàng hóa chuyên nghiệp với đội xe đa dạng từ 1.5 đến 40 tấn. Trang bị GPS Vietmap, đảm bảo hàng hóa an toàn, đúng hẹn trên toàn quốc.",
+  "image": "/images/fields/van-tai.jpg",
+  "stats": [
+    { "label": "Xe tải các loại", "value": "26 xe" },
+    { "label": "Tải trọng", "value": "1.5–40 tấn" },
+    { "label": "Xe khách", "value": "5 xe 29 chỗ" },
+    { "label": "Phạm vi", "value": "Toàn quốc" }
+  ],
+  "features": [
+    "GPS Vietmap theo dõi 24/7",
+    "Tài xế được đào tạo chuyên nghiệp",
+    "Bảo hiểm hàng hóa đầy đủ",
+    "Hệ thống điều phối xe tự động",
+    "Kết nối liên tỉnh Bắc–Trung–Nam"
+  ],
+  "services": [
+    "Vận chuyển hàng nguyên xe",
+    "Vận chuyển hàng lẻ (LTL)",
+    "Xe khách hợp đồng 29 chỗ",
+    "Vận chuyển hàng công nghiệp nặng",
+    "Logistics kho vận"
+  ]
+}

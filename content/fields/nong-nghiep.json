@@ -1,0 +1,28 @@
+{
+  "slug": "nong-nghiep",
+  "name": "Nông nghiệp hữu cơ",
+  "icon": "Leaf",
+  "shortDesc": "2ha rau sạch hữu cơ, VietGAP",
+  "description": "Trang trại nông nghiệp hữu cơ 2ha ứng dụng công nghệ canh tác tiên tiến, không sử dụng thuốc trừ sâu hóa học. Rau sạch đạt chuẩn VietGAP cung cấp cho hệ thống nhà hàng và thị trường.",
+  "image": "/images/fields/nong-nghiep.jpg",
+  "stats": [
+    { "label": "Diện tích", "value": "2 ha" },
+    { "label": "Tiêu chuẩn", "value": "VietGAP" },
+    { "label": "Sản phẩm", "value": "20+ loại rau" },
+    { "label": "Phương pháp", "value": "Hữu cơ" }
+  ],
+  "features": [
+    "Canh tác hữu cơ 100%, không hóa chất",
+    "Đạt chứng nhận VietGAP",
+    "Hệ thống tưới nhỏ giọt tự động",
+    "Nhà kính hiện đại, kiểm soát dịch hại tự nhiên",
+    "Truy xuất nguồn gốc minh bạch"
+  ],
+  "services": [
+    "Rau củ sạch theo mùa",
+    "Giao rau tận nhà, tận quầy",
+    "Cung ứng cho nhà hàng, bếp ăn",
+    "Rau theo hợp đồng",
+    "Tham quan, trải nghiệm nông trại"
+  ]
+}

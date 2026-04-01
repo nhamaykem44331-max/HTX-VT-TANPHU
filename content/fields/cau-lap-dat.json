@@ -1,0 +1,28 @@
+{
+  "slug": "cau-lap-dat",
+  "name": "Cẩu lắp đặt",
+  "icon": "Crane",
+  "shortDesc": "9 cần cẩu 20–330 tấn, lắp đặt thiết bị công nghiệp",
+  "description": "Dịch vụ cẩu và lắp đặt thiết bị công nghiệp với 9 cần cẩu từ 20 đến 330 tấn — lớn nhất khu vực. Đội ngũ kỹ thuật giàu kinh nghiệm, an toàn tuyệt đối.",
+  "image": "/images/fields/cau-lap-dat.jpg",
+  "stats": [
+    { "label": "Cần cẩu", "value": "9 chiếc" },
+    { "label": "Sức nâng", "value": "20–330 tấn" },
+    { "label": "Cẩu lớn nhất", "value": "330 tấn" },
+    { "label": "Kinh nghiệm", "value": "20+ năm" }
+  ],
+  "features": [
+    "Cần cẩu 330 tấn lớn nhất khu vực",
+    "Đội kỹ thuật được chứng nhận an toàn",
+    "Thiết bị hiện đại, bảo trì định kỳ",
+    "Tư vấn phương án thi công tối ưu",
+    "Hỗ trợ 24/7 cho các dự án khẩn cấp"
+  ],
+  "services": [
+    "Lắp đặt thiết bị nhà máy công nghiệp",
+    "Cẩu hạ thủy công trình",
+    "Vận chuyển thiết bị siêu trường",
+    "Lắp đặt kết cấu thép",
+    "Tư vấn giải pháp cẩu lắp"
+  ]
+}

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <rect width="200" height="60" rx="8" fill="#1B3A5C"/>
+  <rect x="8" y="8" width="44" height="44" rx="6" fill="#D85A30"/>
+  <text x="30" y="36" font-family="Arial" font-size="11" font-weight="900" fill="white" text-anchor="middle">HTX</text>
+  <text x="62" y="24" font-family="Arial" font-size="9" font-weight="600" fill="rgba(255,255,255,0.7)">HTX VẬN TẢI Ô TÔ</text>
+  <text x="62" y="40" font-family="Arial" font-size="14" font-weight="900" fill="#F0997B">TÂN PHÚ</text>
+</svg>

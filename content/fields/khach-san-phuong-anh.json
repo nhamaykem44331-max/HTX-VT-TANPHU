@@ -1,0 +1,28 @@
+{
+  "slug": "khach-san-phuong-anh",
+  "name": "Khách sạn Phương Anh",
+  "icon": "Hotel",
+  "shortDesc": "41 phòng, Số 345 Thống Nhất, Tích Lương",
+  "description": "Khách sạn Phương Anh 3 sao với 41 phòng tiện nghi hiện đại tại trung tâm Thái Nguyên. Không gian thoáng đãng, dịch vụ chuyên nghiệp, giá cả hợp lý.",
+  "image": "/images/fields/khach-san.jpg",
+  "stats": [
+    { "label": "Số phòng", "value": "41 phòng" },
+    { "label": "Hạng sao", "value": "3 sao" },
+    { "label": "Điện thoại", "value": "0839.881.881" },
+    { "label": "Địa chỉ", "value": "345 Thống Nhất" }
+  ],
+  "features": [
+    "41 phòng tiêu chuẩn và phòng VIP",
+    "Wifi miễn phí tốc độ cao",
+    "Bãi đỗ xe rộng rãi, miễn phí",
+    "Nhà hàng phục vụ 3 bữa/ngày",
+    "Phòng hội nghị sức chứa 200 khách"
+  ],
+  "services": [
+    "Phòng nghỉ ngắn hạn, dài hạn",
+    "Tổ chức hội nghị, hội thảo",
+    "Tiệc cưới, sinh nhật",
+    "Dịch vụ đưa đón sân bay",
+    "Đặt phòng theo nhóm, đoàn"
+  ]
+}

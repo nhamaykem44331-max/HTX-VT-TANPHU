@@ -1,0 +1,18 @@
+[
+  { "name": "Tập đoàn Hòa Phát", "category": "thep" },
+  { "name": "Vietjet Air", "category": "hang-khong" },
+  { "name": "Vietnam Airlines", "category": "hang-khong" },
+  { "name": "Bamboo Airways", "category": "hang-khong" },
+  { "name": "BIDV Thái Nguyên", "category": "ngan-hang" },
+  { "name": "Vietcombank", "category": "ngan-hang" },
+  { "name": "Agribank", "category": "ngan-hang" },
+  { "name": "KKC Việt Nam", "category": "cong-nghiep" },
+  { "name": "Samsung Display Vietnam", "category": "cong-nghiep" },
+  { "name": "Khu CN Yên Bình", "category": "khu-cong-nghiep" },
+  { "name": "Liên minh HTX Việt Nam", "category": "to-chuc" },
+  { "name": "UBND tỉnh Thái Nguyên", "category": "co-quan" },
+  { "name": "Amadeus GDS", "category": "cong-nghe" },
+  { "name": "Vietmap", "category": "cong-nghe" },
+  { "name": "Skyhotel PMS", "category": "cong-nghe" },
+  { "name": "Pacific Airlines", "category": "hang-khong" }
+]

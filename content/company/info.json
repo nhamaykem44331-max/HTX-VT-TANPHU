@@ -1,0 +1,47 @@
+{
+  "name": "HTX Vận tải Ô tô Tân Phú",
+  "shortName": "HTX Vận tải Ô tô Tân Phú",
+  "founded": 1995,
+  "years": 30,
+  "slogan": "GIEO UY TÍN GẶT THÀNH CÔNG",
+  "taxCode": "4600111735",
+  "director": "Nguyễn Đức Điểm",
+  "revenue": "~2.990 tỷ đồng/năm",
+  "staff": "150+",
+  "website": "htxtanphu.com",
+  "hotline": "0208.383.2608",
+  "hotlineTel": "02083832608",
+  "email": "info@htxtanphu.com",
+  "zalo": "https://zalo.me/02083832608",
+  "facebook": "https://facebook.com/htxtanphu",
+  "addresses": [
+    {
+      "key": "headquarters",
+      "label": "Trụ sở chính — Thái Nguyên",
+      "address": "Tổ 9 Phương Tích Lương, TP. Thái Nguyên",
+      "phone": "0208.383.2608",
+      "mapUrl": "https://maps.google.com/?q=HTX+Van+tai+O+to+Tan+Phu+Thai+Nguyen"
+    },
+    {
+      "key": "vinhPhuc",
+      "label": "Chi nhánh Vĩnh Phúc",
+      "address": "Phúc Yên, Vĩnh Phúc",
+      "phone": "0208.383.2608",
+      "mapUrl": "https://maps.google.com/?q=Phuc+Yen+Vinh+Phuc"
+    },
+    {
+      "key": "hoaBinh",
+      "label": "Chi nhánh Hòa Bình",
+      "address": "Xóm Khanh, Xã Mường Bi, Tỉnh Hòa Bình",
+      "phone": "0208.383.2608",
+      "mapUrl": "https://maps.google.com/?q=Muong+Bi+Hoa+Binh+Vietnam"
+    },
+    {
+      "key": "socSon",
+      "label": "Chi nhánh Sóc Sơn",
+      "address": "Thôn Mai Nội, Sóc Sơn, Hà Nội",
+      "phone": "0208.383.2608",
+      "mapUrl": "https://maps.google.com/?q=Soc+Son+Ha+Noi"
+    }
+  ]
+}

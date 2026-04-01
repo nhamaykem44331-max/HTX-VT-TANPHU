@@ -1,0 +1,28 @@
+{
+  "slug": "ve-may-bay",
+  "name": "Đại lý vé máy bay",
+  "icon": "Plane",
+  "shortDesc": "GDS Amadeus, website book.tanphuapg.com",
+  "description": "Tân Phú APG — đại lý vé máy bay cấp 1 chính thức tại Thái Nguyên. Kết nối hệ thống GDS Amadeus toàn cầu, hỗ trợ đặt vé nội địa và quốc tế nhanh chóng.",
+  "image": "/images/fields/ve-may-bay.jpg",
+  "stats": [
+    { "label": "Cấp đại lý", "value": "Cấp 1" },
+    { "label": "Hệ thống GDS", "value": "Amadeus" },
+    { "label": "Hãng hợp tác", "value": "10+ hãng" },
+    { "label": "Website đặt vé", "value": "book.tanphuapg.com" }
+  ],
+  "features": [
+    "Đại lý cấp 1 Vietjet Air chính thức",
+    "Kết nối GDS Amadeus toàn cầu",
+    "Đặt vé online 24/7 tại book.tanphuapg.com",
+    "Hỗ trợ visa, hành lý, suất ăn",
+    "Giá vé tốt nhất, không phụ thu"
+  ],
+  "services": [
+    "Vé máy bay nội địa",
+    "Vé máy bay quốc tế",
+    "Gói du lịch trọn gói",
+    "Visa các nước",
+    "Bảo hiểm du lịch"
+  ]
+}

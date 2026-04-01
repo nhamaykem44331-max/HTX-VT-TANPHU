@@ -1,0 +1,28 @@
+{
+  "slug": "kinh-doanh-thep",
+  "name": "Kinh doanh thép",
+  "icon": "Factory",
+  "shortDesc": "200.000 tấn/năm, đối tác Hòa Phát",
+  "description": "Đại lý phân phối thép Hòa Phát uy tín với sản lượng 200.000 tấn/năm. Hệ thống kho bãi hiện đại tại Yên Bình và Tích Lương, giao hàng nhanh toàn vùng.",
+  "image": "/images/fields/kinh-doanh-thep.jpg",
+  "stats": [
+    { "label": "Sản lượng/năm", "value": "200.000 tấn" },
+    { "label": "Đối tác", "value": "Hòa Phát" },
+    { "label": "Kho bãi", "value": "Yên Bình + Tích Lương" },
+    { "label": "Diện tích kho", "value": "10.000 m²" }
+  ],
+  "features": [
+    "Đại lý chính thức thép Hòa Phát",
+    "Kho bãi 10.000m² hiện đại",
+    "Giá cạnh tranh, cập nhật thị trường",
+    "Vận chuyển nhanh, đúng hẹn",
+    "Hỗ trợ tín dụng linh hoạt"
+  ],
+  "services": [
+    "Thép xây dựng Hòa Phát",
+    "Thép cuộn, thép cây",
+    "Thép hình các loại",
+    "Tôn lợp, tôn mạ kẽm",
+    "Tư vấn vật liệu cho công trình"
+  ]
+}
