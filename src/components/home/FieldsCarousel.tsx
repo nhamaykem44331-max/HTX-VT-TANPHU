@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { ArrowRight, Truck, Factory, Hotel, UtensilsCrossed, Plane, Leaf, Building2 } from "lucide-react";
-import { fields } from "@/data/fields";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
@@ -17,7 +16,9 @@ const iconMap: Record<string, React.ReactNode> = {
   Building2: <Building2 size={24} />,
 };
 
-export default function FieldsCarousel() {
+export default function FieldsCarousel({ fields = [] }: { fields?: any[] }) {
+  if (!fields.length) return null;
+
   return (
     <section className="section-padding" style={{ backgroundColor: "var(--ivory)" }}>
       <div className="container-wide">
@@ -33,12 +34,17 @@ export default function FieldsCarousel() {
             <ScrollReveal key={field.id} delay={i * 0.07}>
               <Link href={`/linh-vuc/${field.slug}`} className="group block card-hover bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl">
                 {/* Image */}
-                <div className="relative overflow-hidden">
-                  <ImagePlaceholder
-                    label={field.name}
-                    className="w-full rounded-none group-hover:scale-105 transition-transform duration-500"
-                    aspectRatio="video"
-                  />
+                <div className="relative overflow-hidden aspect-video">
+                  {field.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={field.image} alt={field.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  ) : (
+                    <ImagePlaceholder
+                      label={field.name}
+                      className="w-full h-full rounded-none group-hover:scale-105 transition-transform duration-500"
+                      aspectRatio="video"
+                    />
+                  )}
                   {/* Icon overlay */}
                   <div className="absolute top-3 right-3 w-10 h-10 rounded-sm flex items-center justify-center text-white shadow-lg" style={{ backgroundColor: "var(--orange)" }}>
                     {iconMap[field.icon] || <Factory size={20} />}

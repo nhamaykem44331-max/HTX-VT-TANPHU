@@ -1,9 +1,10 @@
-import { partners } from "@/data/partners";
+import { getPartners } from "@/lib/data-service";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 
-export default function PartnersSection() {
-  const doubled = [...partners, ...partners];
+export default async function PartnersSection() {
+  const flexPartners = await getPartners();
+  const doubled = [...flexPartners, ...flexPartners];
 
   return (
     <section className="section-padding" style={{ backgroundColor: "var(--ivory)" }}>

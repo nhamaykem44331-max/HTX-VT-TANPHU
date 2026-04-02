@@ -1,14 +1,20 @@
 import Link from "next/link";
 import { ArrowRight, Calendar, Clock } from "lucide-react";
-import { newsArticles } from "@/data/news";
+import { getNews, getFeaturedNews } from "@/lib/data-service";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import { formatDate } from "@/lib/utils";
 
-export default function NewsSection() {
-  const featured = newsArticles.find((n) => n.featured) || newsArticles[0];
-  const others = newsArticles.filter((n) => n.id !== featured.id).slice(0, 4);
+export default async function NewsSection() {
+  const featured = await getFeaturedNews();
+  const allLatest = await getNews(5);
+  
+  // fallback if no data
+  if (!featured && (!allLatest || allLatest.length === 0)) return null;
+  
+  const displayFeatured = featured || allLatest[0];
+  const others = allLatest.filter((n) => n.id !== displayFeatured.id).slice(0, 4);
 
   return (
     <section className="section-padding" style={{ backgroundColor: "var(--ivory)" }}>
@@ -23,29 +29,29 @@ export default function NewsSection() {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
           {/* Featured left */}
           <ScrollReveal delay={0.1} className="lg:col-span-3">
-            <Link href={`/tin-tuc/${featured.slug}`} className="group block bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow">
+            <Link href={`/tin-tuc/${displayFeatured.slug}`} className="group block bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow">
               <div className="overflow-hidden">
-                <ImagePlaceholder label={featured.title} className="w-full rounded-none group-hover:scale-105 transition-transform duration-500" aspectRatio="video" />
+                <ImagePlaceholder label={displayFeatured.title} className="w-full rounded-none group-hover:scale-105 transition-transform duration-500" aspectRatio="video" />
               </div>
               <div className="p-6">
                 <span className="inline-block px-3 py-1 rounded-sm text-xs font-semibold text-white mb-3" style={{ backgroundColor: "var(--orange)" }}>
-                  {featured.category}
+                  {displayFeatured.category}
                 </span>
                 <h3 className="font-heading font-bold text-gray-900 text-xl leading-tight mb-3 group-hover:text-orange-600 transition-colors line-clamp-2">
-                  {featured.title}
+                  {displayFeatured.title}
                 </h3>
                 <p className="text-gray-500 text-sm leading-relaxed mb-4 line-clamp-3">
-                  {featured.excerpt}
+                  {displayFeatured.excerpt}
                 </p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4 text-xs text-gray-400">
                     <span className="flex items-center gap-1">
                       <Calendar size={12} />
-                      {formatDate(featured.date)}
+                      {formatDate(displayFeatured.date)}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock size={12} />
-                      {featured.readTime} phút đọc
+                      {displayFeatured.readTime} phút đọc
                     </span>
                   </div>
                   <span className="flex items-center gap-1 text-orange-500 font-semibold text-sm group-hover:gap-2 transition-all">

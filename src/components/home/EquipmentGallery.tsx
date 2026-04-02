@@ -6,27 +6,12 @@ import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 
 const tabs = ["Tất cả", "Xe tải", "Cần cẩu", "Kho bãi", "Công nghệ"];
 
-const equipmentItems = [
-  { name: "Xe tải 40 tấn Hyundai", category: "Xe tải", desc: "Trọng tải 40 tấn, trang bị GPS Vietmap" },
-  { name: "Xe tải 20 tấn", category: "Xe tải", desc: "Đội xe 26 chiếc phủ khắp cả nước" },
-  { name: "Xe khách 29 chỗ", category: "Xe tải", desc: "5 xe khách phục vụ hợp đồng" },
-  { name: "Cần cẩu 330 tấn", category: "Cần cẩu", desc: "Cẩu lớn nhất khu vực Đông Bắc" },
-  { name: "Cần cẩu 100 tấn", category: "Cần cẩu", desc: "Linh hoạt trong các công trình vừa" },
-  { name: "Cần cẩu 50 tấn", category: "Cần cẩu", desc: "Lắp đặt thiết bị công nghiệp nhẹ" },
-  { name: "Kho bãi Yên Bình", category: "Kho bãi", desc: "5.000m² kho chứa thép hiện đại" },
-  { name: "Kho bãi Tích Lương", category: "Kho bãi", desc: "Kho phân phối hàng trung chuyển" },
-  { name: "Hệ thống GPS Vietmap", category: "Công nghệ", desc: "Theo dõi đội xe thời gian thực" },
-  { name: "Phần mềm Skyhotel PMS", category: "Công nghệ", desc: "Quản lý khách sạn chuyên nghiệp" },
-  { name: "GDS Amadeus", category: "Công nghệ", desc: "Hệ thống đặt vé toàn cầu" },
-  { name: "Base.vn HRM/CRM", category: "Công nghệ", desc: "Quản lý nhân sự và khách hàng" },
-];
-
-export default function EquipmentGallery() {
+export default function EquipmentGallery({ equipments = [] }: { equipments?: any[] }) {
   const [activeTab, setActiveTab] = useState("Tất cả");
 
   const filtered = activeTab === "Tất cả"
-    ? equipmentItems
-    : equipmentItems.filter((e) => e.category === activeTab);
+    ? equipments
+    : equipments.filter((e) => e.category === activeTab);
 
   return (
     <section className="section-padding bg-white">
@@ -60,8 +45,15 @@ export default function EquipmentGallery() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {filtered.map((item, i) => (
             <ScrollReveal key={i} delay={i * 0.05}>
-              <div className="group bg-gray-50 rounded-sm overflow-hidden hover:shadow-lg transition-shadow border border-gray-100">
-                <ImagePlaceholder label={item.name} className="w-full rounded-none" aspectRatio="video" iconSize={24} />
+              <div className="group bg-gray-50 rounded-sm overflow-hidden hover:shadow-lg transition-shadow border border-gray-100 flex flex-col h-full">
+                <div className="aspect-video w-full bg-gray-200">
+                  {item.image ? (
+                     // eslint-disable-next-line @next/next/no-img-element
+                     <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  ) : (
+                     <ImagePlaceholder label={item.name} className="w-full h-full rounded-none" aspectRatio="video" iconSize={24} />
+                  )}
+                </div>
                 <div className="p-4">
                   <h4 className="font-heading font-semibold text-gray-800 text-sm mb-1 line-clamp-1">{item.name}</h4>
                   <p className="text-gray-500 text-xs line-clamp-2">{item.desc}</p>

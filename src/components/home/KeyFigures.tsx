@@ -2,7 +2,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 import { Calendar, Users, Truck, Warehouse, TrendingUp, Wrench } from "lucide-react";
-import { KEY_FIGURES } from "@/lib/constants";
 
 const iconComponents = {
   calendar: Calendar,
@@ -38,7 +37,9 @@ function Counter({ target, suffix = "", prefix = "", duration = 2000 }: { target
   );
 }
 
-export default function KeyFigures() {
+export default function KeyFigures({ figures = [] }: { figures?: any[] }) {
+  if (!figures || figures.length === 0) return null;
+
   return (
     <section className="section-padding" style={{ background: "linear-gradient(135deg, var(--navy-dark) 0%, var(--navy) 100%)" }}>
       <div className="container-wide">
@@ -51,7 +52,7 @@ export default function KeyFigures() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          {KEY_FIGURES.map((fig, i) => {
+          {figures.map((fig, i) => {
             const Icon = iconComponents[fig.icon as keyof typeof iconComponents] || TrendingUp;
             return (
               <div

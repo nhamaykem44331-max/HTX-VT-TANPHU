@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -74,11 +75,15 @@ const localBusinessSchema = {
   sameAs: [COMPANY_INFO.facebook],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers()
+  const pathname = headersList.get('x-pathname') || ''
+  const isAdmin = pathname.startsWith('/admin')
+
   return (
     <html lang="vi">
       <head>
@@ -93,11 +98,20 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body antialiased">
-        <Header />
-        <main className="pt-[60px]">{children}</main>
-        <Footer />
-        <FloatingButtons />
+        {isAdmin ? (
+          // Admin pages: no Header/Footer, no pt-[60px]
+          <>{children}</>
+        ) : (
+          // Public pages: full layout with Header/Footer
+          <>
+            <Header />
+            <main className="pt-[60px]">{children}</main>
+            <Footer />
+            <FloatingButtons />
+          </>
+        )}
       </body>
     </html>
   );
 }
+

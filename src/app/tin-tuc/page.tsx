@@ -1,23 +1,40 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Calendar, Clock, ArrowRight } from "lucide-react";
-import { newsArticles } from "@/data/news";
+import { getNews } from "@/lib/data-service";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import { formatDate } from "@/lib/utils";
 
+// @seo-audit: added canonical, openGraph, twitter, keywords
 export const metadata: Metadata = {
-  title: "Tin tức & Sự kiện — HTX Tân Phú",
-  description: "Cập nhật tin tức mới nhất về hoạt động của HTX Vận tải Ô tô Tân Phú: sự kiện, thành tích, đầu tư và phát triển.",
+  title: "Tin tức & Sự kiện — HTX Vận tải Ô tô Tân Phú",
+  description: "Cập nhật tin tức mới nhất về HTX Vận tải Ô tô Tân Phú Thái Nguyên: thành tích, sự kiện, đầu tư, công nghệ và hoạt động cộng đồng.",
+  keywords: ["tin tức HTX Tân Phú", "sự kiện HTX", "thành tích hợp tác xã Thái Nguyên"],
+  alternates: { canonical: "https://htxtanphu.com/tin-tuc" },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: "https://htxtanphu.com/tin-tuc",
+    title: "Tin tức & Sự kiện — HTX Tân Phú",
+    description: "Cập nhật tin tức mới nhất về hoạt động của HTX Vận tải Ô tô Tân Phú.",
+    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+  },
 };
 
 const categories = ["Tất cả", "Thành tích", "Sự kiện", "Hoạt động", "Đầu tư", "Công nghệ"];
 
-export default function TinTucPage() {
-  const featured = newsArticles.find((n) => n.featured) || newsArticles[0];
-  const rest = newsArticles.filter((n) => n.id !== featured.id);
+export default async function TinTucPage() {
+  const allLatest = await getNews();
+  const featured = allLatest.find((n) => n.featured) || allLatest[0];
+  
+  if (!featured && (!allLatest || allLatest.length === 0)) {
+    return <div>Không có bài viết nào.</div>;
+  }
+  
+  const rest = allLatest.filter((n) => n.id !== featured.id);
 
   return (
     <div>

@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, ArrowLeft, User, Tag } from "lucide-react";
-import { newsArticles, getNewsBySlug } from "@/data/news";
+import { newsArticles } from "@/data/news";
+import { getNewsBySlug, getNews } from "@/lib/data-service";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import ScrollReveal from "@/components/shared/ScrollReveal";
@@ -17,7 +18,7 @@ export async function generateMetadata({
 }: {
   params: { slug: string };
 }): Promise<Metadata> {
-  const article = getNewsBySlug(params.slug);
+  const article = await getNewsBySlug(params.slug);
   if (!article) return {};
   return {
     title: `${article.title} — HTX Tân Phú`,
@@ -31,15 +32,16 @@ export async function generateMetadata({
   };
 }
 
-export default function TinTucDetailPage({
+export default async function TinTucDetailPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const article = getNewsBySlug(params.slug);
+  const article = await getNewsBySlug(params.slug);
   if (!article) notFound();
 
-  const related = newsArticles.filter((a) => a.id !== article.id).slice(0, 3);
+  const allNews = await getNews(4);
+  const related = allNews.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
     <div>

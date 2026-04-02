@@ -4,43 +4,21 @@ import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 
-const slides = [
-  {
-    label: "Đội xe vận tải hùng mạnh",
-    title: "30 NĂM HÒA HỢP\nCÙNG PHÁT TRIỂN",
-    sub: "HTX Vận tải Ô tô Tân Phú — Đa ngành, Chuyên nghiệp, Uy tín",
-    bg: "/images/hero/hero-1.jpg",
-  },
-  {
-    label: "Cần cẩu 330 tấn lớn nhất khu vực",
-    title: "NĂNG LỰC CẨU LẮP\nHÀNG ĐẦU KHU VỰC",
-    sub: "9 cần cẩu từ 20 đến 330 tấn — An toàn tuyệt đối, Hiệu quả tối đa",
-    bg: "/images/hero/hero-2.jpg",
-  },
-  {
-    label: "Khách sạn Phương Anh sang trọng",
-    title: "KHÁCH SẠN PHƯƠNG ANH\n41 PHÒNG TIÊU CHUẨN",
-    sub: "Số 345 Thống Nhất, Tích Lương — Không gian thoáng đãng, Dịch vụ tận tâm",
-    bg: "/images/hero/hero-3.jpg",
-  },
-  {
-    label: "Nông nghiệp hữu cơ VietGAP",
-    title: "NÔNG NGHIỆP SẠCH\nHỮU CƠ VIETGAP",
-    sub: "2ha rau sạch không hóa chất — Từ trang trại đến bàn ăn của bạn",
-    bg: "/images/hero/hero-4.jpg",
-  },
-];
+// Default fallback inside component is not needed since the data-service provides it
 
-export default function HeroBanner() {
+export default function HeroBanner({ slides = [] }: { slides?: any[] }) {
   const [current, setCurrent] = useState(0);
 
-  const next = useCallback(() => setCurrent((c) => (c + 1) % slides.length), []);
-  const prev = () => setCurrent((c) => (c - 1 + slides.length) % slides.length);
+  const next = useCallback(() => setCurrent((c) => (c + 1) % Math.max(slides.length, 1)), [slides.length]);
+  const prev = () => setCurrent((c) => (c - 1 + slides.length) % Math.max(slides.length, 1));
 
   useEffect(() => {
+    if (slides.length <= 1) return;
     const timer = setInterval(next, 5000);
     return () => clearInterval(timer);
-  }, [next]);
+  }, [next, slides.length]);
+
+  if (!slides || slides.length === 0) return null;
 
   return (
     <section className="relative w-full overflow-hidden" style={{ height: "calc(100vh - 60px)", minHeight: "520px" }}>
@@ -50,11 +28,16 @@ export default function HeroBanner() {
           className={`absolute inset-0 transition-opacity duration-1000 ${i === current ? "opacity-100" : "opacity-0"}`}
         >
           {/* Background */}
-          <ImagePlaceholder
-            label={slide.label}
-            className="w-full h-full rounded-none"
-            aspectRatio="wide"
-          />
+          {slide.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={slide.image} alt={slide.title} className="w-full h-full object-cover" />
+          ) : (
+            <ImagePlaceholder
+              label={slide.subtitle}
+              className="w-full h-full rounded-none"
+              aspectRatio="wide"
+            />
+          )}
           {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-r from-navy/90 via-navy/70 to-transparent" />
 
@@ -75,15 +58,17 @@ export default function HeroBanner() {
                   className="text-white/80 text-base md:text-lg leading-relaxed mb-8 opacity-0 animate-slide-up"
                   style={{ animationDelay: "0.45s", animationFillMode: "forwards" }}
                 >
-                  {slide.sub}
+                  {slide.description}
                 </p>
                 <div
                   className="flex flex-wrap gap-4 opacity-0 animate-slide-up"
                   style={{ animationDelay: "0.6s", animationFillMode: "forwards" }}
                 >
-                  <Link href="/linh-vuc" className="btn-primary">
-                    Khám phá dịch vụ
-                  </Link>
+                  {slide.cta_text && (
+                    <Link href={slide.cta_link || '/'} className="btn-primary">
+                      {slide.cta_text}
+                    </Link>
+                  )}
                   <Link href="/lien-he" className="btn-outline">
                     Liên hệ ngay
                   </Link>
@@ -111,7 +96,7 @@ export default function HeroBanner() {
       </button>
 
       {/* Dots */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {slides.map((_, i) => (
           <button
             key={i}

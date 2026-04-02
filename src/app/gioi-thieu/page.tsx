@@ -8,9 +8,20 @@ import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import { CheckCircle, Star, Target, Eye, Heart } from "lucide-react";
 import { COMPANY_INFO } from "@/lib/constants";
 
+// @seo-audit: added canonical, openGraph, keywords
 export const metadata: Metadata = {
-  title: "Giới thiệu — HTX Vận tải Ô tô Tân Phú",
-  description: "Tìm hiểu về HTX Vận tải Ô tô Tân Phú — 30 năm phát triển, sứ mệnh tầm nhìn, ban lãnh đạo và thành tích nổi bật.",
+  title: "Giới thiệu — HTX Vận tải Ô tô Tân Phú Thái Nguyên",
+  description: "Tìm hiểu về HTX Vận tải Ô tô Tân Phú — 30 năm phát triển, sứ mệnh tầm nhìn, ban lãnh đạo và thành tích nổi bật tại Thái Nguyên.",
+  keywords: ["giới thiệu HTX Tân Phú", "lịch sử hợp tác xã Thái Nguyên", "ban lãnh đạo HTX", "30 năm phát triển"],
+  alternates: { canonical: "https://htxtanphu.com/gioi-thieu" },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: "https://htxtanphu.com/gioi-thieu",
+    title: "Giới thiệu HTX Tân Phú — 30 năm hòa hợp cùng phát triển",
+    description: "Tìm hiểu về HTX Vận tải Ô tô Tân Phú: lịch sử, sứ mệnh, ban lãnh đạo và thành tích 30 năm.",
+    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+  },
 };
 
 const leaders = [

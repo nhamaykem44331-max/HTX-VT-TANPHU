@@ -29,3 +29,6 @@ next-env.d.ts
 # IDE
 .vscode/
 .idea/
+
+# Antigravity agent skills (local tooling)
+.agent/

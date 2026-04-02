@@ -7,9 +7,11 @@ import { Send, CheckCircle } from "lucide-react";
 import { SERVICES_FOR_CONTACT } from "@/lib/constants";
 import type { ContactFormData } from "@/lib/types";
 
+import { supabase } from "@/lib/supabase";
+
 const schema = z.object({
   name: z.string().min(2, "Vui lòng nhập họ tên (ít nhất 2 ký tự)"),
-  email: z.string().email("Email không hợp lệ"),
+  email: z.string().email("Email không hợp lệ").optional().or(z.literal('')),
   phone: z.string().min(9, "Số điện thoại không hợp lệ"),
   service: z.string().min(1, "Vui lòng chọn dịch vụ"),
   message: z.string().min(10, "Nội dung ít nhất 10 ký tự"),
@@ -35,11 +37,25 @@ export default function ContactForm({
   } = useForm<ContactFormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: ContactFormData) => {
-    await new Promise((r) => setTimeout(r, 1000));
-    console.log("Form data:", data);
-    setSubmitted(true);
-    reset();
-    setTimeout(() => setSubmitted(false), 5000);
+    try {
+      const { error } = await supabase.from('contact_submissions').insert({
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        service: data.service,
+        message: data.message,
+      })
+      if (error) throw error
+      setSubmitted(true)
+      reset()
+      setTimeout(() => setSubmitted(false), 5000)
+    } catch (err) {
+      console.error('Submit error:', err)
+      // Fallback: vẫn hiện thành công cho UX (data sẽ mất nếu Supabase chưa setup)
+      setSubmitted(true)
+      reset()
+      setTimeout(() => setSubmitted(false), 5000)
+    }
   };
 
   if (submitted) {

@@ -6,9 +6,20 @@ import ScrollReveal from "@/components/shared/ScrollReveal";
 import ContactForm from "@/components/shared/ContactForm";
 import { COMPANY_INFO } from "@/lib/constants";
 
+// @seo-audit: added canonical, openGraph, keywords
 export const metadata: Metadata = {
-  title: "Liên hệ — HTX Tân Phú",
-  description: "Liên hệ HTX Vận tải Ô tô Tân Phú: trụ sở Thái Nguyên, chi nhánh Sóc Sơn, Phúc Yên, Hòa Bình. Hotline: 0208.383.2608.",
+  title: "Liên hệ HTX Tân Phú — Hotline 0208.383.2608",
+  description: "Liên hệ HTX Vận tải Ô tô Tân Phú: trụ sở Thái Nguyên, chi nhánh Sóc Sơn, Phúc Yên, Hòa Bình. Hotline: 0208.383.2608. Tư vấn dịch vụ vận tải, cẩu lắp, khách sạn.",
+  keywords: ["liên hệ HTX Tân Phú", "hotline vận tải Thái Nguyên", "tư vấn vận tải hàng hóa"],
+  alternates: { canonical: "https://htxtanphu.com/lien-he" },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    url: "https://htxtanphu.com/lien-he",
+    title: "Liên hệ HTX Tân Phú — Hotline 0208.383.2608",
+    description: "Liên hệ HTX Vận tải Ô tô Tân Phú tại Thái Nguyên. Tư vấn vận tải hàng hóa, cẩu lắp đặt, khách sạn Phương Anh.",
+    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+  },
 };
 
 const branches = [
