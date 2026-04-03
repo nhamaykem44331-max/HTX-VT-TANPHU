@@ -60,3 +60,7 @@ vercel deploy
 - Website: htxtanphu.com
 - Hotline: 0208.383.2608
 - Email: info@htxtanphu.com
+
+## Deploy Checklist
+
+Xem file `DEPLOY_CHECKLIST.md` de lam dung quy trinh deploy cho du an nay.
