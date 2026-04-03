@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase, isSupabaseConfigured } from '@/lib/supabase'
 import { isAuthenticated } from '@/lib/auth'
+import { createServerSupabase, isSupabaseConfigured } from '@/lib/supabase'
+
+const MAX_UPLOAD_SIZE_BYTES = 4 * 1024 * 1024
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
 
 export async function POST(request: NextRequest) {
-  // Kiểm tra auth
   const authed = await isAuthenticated()
   if (!authed) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
@@ -18,28 +20,31 @@ export async function POST(request: NextRequest) {
     }
 
     const formData = await request.formData()
-    const file = formData.get('file') as File
+    const file = formData.get('file') as File | null
     const folder = (formData.get('folder') as string) || 'general'
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    // Validate: chỉ chấp nhận ảnh, max 5MB
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
-    if (!allowedTypes.includes(file.type)) {
-      return NextResponse.json({ error: 'Chỉ chấp nhận file ảnh (JPEG, PNG, WebP, SVG)' }, { status: 400 })
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: 'File quá lớn (tối đa 5MB)' }, { status: 400 })
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { error: 'Chi chap nhan file anh JPEG, PNG, WebP hoac SVG' },
+        { status: 400 }
+      )
     }
 
-    // Tạo tên file unique: folder/timestamp-originalname
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      return NextResponse.json(
+        { error: 'File qua lon. Vui long chon anh toi da 4MB.' },
+        { status: 400 }
+      )
+    }
+
     const timestamp = Date.now()
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
     const filePath = `${folder}/${timestamp}-${safeName}`
 
-    // Upload lên Supabase Storage
     const supabase = createServerSupabase()
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
@@ -55,10 +60,9 @@ export async function POST(request: NextRequest) {
       throw new Error(error.message || 'Khong the upload anh len Supabase Storage')
     }
 
-    // Lấy public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('website-images')
-      .getPublicUrl(data.path)
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from('website-images').getPublicUrl(data.path)
 
     return NextResponse.json({
       success: true,
