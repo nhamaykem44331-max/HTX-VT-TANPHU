@@ -1,29 +1,23 @@
-// @simplify: Extract 4 sub-components to reduce FieldDetail from 162 → ~60 lines.
-// DRY: Stats, Features, Services, Gallery are each one pattern repeated → component.
-// YAGNI: No new abstractions — only extract what exists in 3+ places.
-// Each sub-component is ≤15 lines and does ONE thing.
-
-import { CheckCircle, ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import type { BusinessField } from "@/lib/types";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 
-// ── StatsGrid: renders field.stats ──────────────────────────────────────────
 function StatsGrid({ stats }: { stats: NonNullable<BusinessField["stats"]> }) {
   return (
     <ScrollReveal delay={0.1}>
       <SectionHeading title="Thông số kỹ thuật" centered={false} />
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        {stats.map((s) => (
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {stats.map((item) => (
           <div
-            key={s.label}
-            className="text-center p-5 rounded-sm border-2 border-gray-100 hover:border-orange-200 transition-colors"
+            key={item.label}
+            className="rounded-sm border-2 border-gray-100 p-5 text-center transition-colors hover:border-orange-200"
           >
-            <p className="font-heading font-black text-2xl mb-1" style={{ color: "var(--navy)" }}>
-              {s.value}
+            <p className="mb-1 font-heading text-2xl font-black" style={{ color: "var(--navy)" }}>
+              {item.value}
             </p>
-            <p className="text-gray-500 text-xs font-medium">{s.label}</p>
+            <p className="text-xs font-medium text-gray-500">{item.label}</p>
           </div>
         ))}
       </div>
@@ -31,16 +25,15 @@ function StatsGrid({ stats }: { stats: NonNullable<BusinessField["stats"]> }) {
   );
 }
 
-// ── FeaturesGrid: renders field.features ────────────────────────────────────
 function FeaturesGrid({ features }: { features: string[] }) {
   return (
     <ScrollReveal delay={0.15}>
       <SectionHeading title="Điểm nổi bật" centered={false} />
-      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {features.map((f, i) => (
-          <li key={i} className="flex items-start gap-3 p-4 bg-teal-50 rounded-sm">
-            <CheckCircle size={18} className="text-teal-600 flex-shrink-0 mt-0.5" />
-            <span className="text-gray-700 text-sm leading-snug">{f}</span>
+      <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {features.map((feature, index) => (
+          <li key={`${feature}-${index}`} className="flex items-start gap-3 rounded-sm bg-teal-50 p-4">
+            <CheckCircle size={18} className="mt-0.5 flex-shrink-0 text-teal-600" />
+            <span className="text-sm leading-snug text-gray-700">{feature}</span>
           </li>
         ))}
       </ul>
@@ -48,19 +41,18 @@ function FeaturesGrid({ features }: { features: string[] }) {
   );
 }
 
-// ── ServicesList: renders field.services ────────────────────────────────────
 function ServicesList({ services }: { services: string[] }) {
   return (
     <ScrollReveal delay={0.2}>
       <SectionHeading title="Dịch vụ cung cấp" centered={false} />
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {services.map((s, i) => (
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        {services.map((service, index) => (
           <div
-            key={i}
-            className="flex items-center gap-3 p-4 bg-gray-50 rounded-sm hover:bg-orange-50 transition-colors"
+            key={`${service}-${index}`}
+            className="flex items-center gap-3 rounded-sm bg-gray-50 p-4 transition-colors hover:bg-orange-50"
           >
-            <ArrowRight size={16} className="text-orange-400 flex-shrink-0" />
-            <span className="text-gray-700 text-sm font-medium">{s}</span>
+            <ArrowRight size={16} className="flex-shrink-0 text-orange-400" />
+            <span className="text-sm font-medium text-gray-700">{service}</span>
           </div>
         ))}
       </div>
@@ -68,19 +60,54 @@ function ServicesList({ services }: { services: string[] }) {
   );
 }
 
-// ── ImageGallery: renders placeholder gallery ────────────────────────────────
-function ImageGallery({ fieldName }: { fieldName: string }) {
+function ArticleContent({ content }: { content: string }) {
+  const paragraphs = content
+    .split(/\n\s*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
+  if (paragraphs.length === 0) {
+    return null;
+  }
+
+  return (
+    <ScrollReveal delay={0.08}>
+      <SectionHeading title="Nội dung chi tiết" centered={false} />
+      <div className="space-y-4">
+        {paragraphs.map((paragraph, index) => (
+          <p key={index} className="whitespace-pre-line leading-relaxed text-gray-600">
+            {paragraph}
+          </p>
+        ))}
+      </div>
+    </ScrollReveal>
+  );
+}
+
+function ArticleImage({ src, alt, className = "" }: { src: string; alt: string; className?: string }) {
+  return (
+    <div className={`overflow-hidden rounded-sm border border-gray-100 bg-gray-50 ${className}`}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+    </div>
+  );
+}
+
+function ImageGallery({ fieldName, images }: { fieldName: string; images: string[] }) {
+  if (images.length === 0) {
+    return null;
+  }
+
   return (
     <ScrollReveal delay={0.25}>
       <SectionHeading title="Hình ảnh thực tế" centered={false} />
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {[1, 2, 3, 4, 5, 6].map((n) => (
-          <ImagePlaceholder
-            key={n}
-            label={`${fieldName} ${n}`}
-            aspectRatio="video"
-            className="rounded-sm"
-            iconSize={20}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {images.map((image, index) => (
+          <ArticleImage
+            key={`${image}-${index}`}
+            src={image}
+            alt={`${fieldName} ${index + 1}`}
+            className="aspect-video"
           />
         ))}
       </div>
@@ -88,25 +115,35 @@ function ImageGallery({ fieldName }: { fieldName: string }) {
   );
 }
 
-// ── FieldMainContent: main content column ───────────────────────────────────
+function IntroMedia({ field }: { field: BusinessField }) {
+  if (!field.image) {
+    return <ImagePlaceholder label={field.name} aspectRatio="video" className="rounded-sm" />;
+  }
+
+  return <ArticleImage src={field.image} alt={field.name} className="aspect-video" />;
+}
+
 export function FieldMainContent({ field }: { field: BusinessField }) {
+  const articleContent = field.articleContent?.trim() || "";
+  const articleImages = field.articleImages?.filter(Boolean) || [];
+
   return (
-    <div className="lg:col-span-2 space-y-12">
-      {/* Giới thiệu */}
+    <div className="space-y-12 lg:col-span-2">
       <ScrollReveal>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2">
           <div>
             <SectionHeading title="Giới thiệu dịch vụ" centered={false} />
-            <p className="text-gray-600 leading-relaxed">{field.description}</p>
+            <p className="leading-relaxed text-gray-600">{field.description}</p>
           </div>
-          <ImagePlaceholder label={field.name} aspectRatio="video" className="rounded-sm" />
+          <IntroMedia field={field} />
         </div>
       </ScrollReveal>
 
-      {field.stats && <StatsGrid stats={field.stats} />}
-      {field.features && <FeaturesGrid features={field.features} />}
-      {field.services && <ServicesList services={field.services} />}
-      <ImageGallery fieldName={field.name} />
+      <ArticleContent content={articleContent} />
+      {field.stats && field.stats.length > 0 ? <StatsGrid stats={field.stats} /> : null}
+      {field.features && field.features.length > 0 ? <FeaturesGrid features={field.features} /> : null}
+      {field.services && field.services.length > 0 ? <ServicesList services={field.services} /> : null}
+      <ImageGallery fieldName={field.name} images={articleImages} />
     </div>
   );
 }

@@ -1,0 +1,5 @@
+ALTER TABLE IF EXISTS public.fields
+  ADD COLUMN IF NOT EXISTS article_content TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE IF EXISTS public.fields
+  ADD COLUMN IF NOT EXISTS article_images JSONB DEFAULT '[]'::jsonb;

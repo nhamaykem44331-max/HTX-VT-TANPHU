@@ -62,6 +62,11 @@ async function executeFile(filePath, label) {
   await client.query(sql)
 }
 
+async function executeIfExists(filePath, label) {
+  if (!fs.existsSync(filePath)) return
+  await executeFile(filePath, label)
+}
+
 async function ensureExtensions() {
   await client.query(`
     CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -168,6 +173,8 @@ async function run() {
         `Detected partial schema setup (${existingTableCount}/${requiredTables.length} tables). Please review the database before rerunning the full bootstrap script.`
       )
     }
+
+    await executeIfExists('supabase-fields-article-migration.sql', 'fields article migration')
 
     console.log('Ensuring storage bucket and policies...')
     await ensureStorage()

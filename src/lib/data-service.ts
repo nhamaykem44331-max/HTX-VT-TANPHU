@@ -3,7 +3,7 @@ import { newsArticles as staticNews } from '@/data/news'
 import { jobs as staticJobs } from '@/data/jobs'
 import { partners as staticPartners } from '@/data/partners'
 import { awards as staticAwards } from '@/data/awards'
-import type { NewsArticle, Job, Partner, Award } from './types'
+import type { NewsArticle, Job, Partner, Award, BusinessField } from './types'
 
 // ============ HOMEPAGE SECTIONS ============
 export async function getHeroSlides() {
@@ -157,7 +157,7 @@ export async function getAwards(): Promise<Award[]> {
 }
 
 // ============ FIELDS ============
-export async function getFields(): Promise<any[]> {
+export async function getFields(): Promise<BusinessField[]> {
   try {
     const { data, error } = await supabase
       .from('fields').select('*').order('sort_order', { ascending: true })
@@ -230,7 +230,7 @@ function mapJobFromDB(row: any): Job {
   }
 }
 
-function mapFieldFromDB(row: any): any {
+function mapFieldFromDB(row: any): BusinessField {
   return {
     id: row.id,
     slug: row.slug,
@@ -242,5 +242,7 @@ function mapFieldFromDB(row: any): any {
     stats: row.stats || [],
     features: row.features || [],
     services: row.services || [],
+    articleContent: row.article_content || '',
+    articleImages: row.article_images || [],
   }
 }

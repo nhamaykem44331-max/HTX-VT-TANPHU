@@ -181,10 +181,18 @@ CREATE TABLE IF NOT EXISTS public.fields (
     stats JSONB DEFAULT '[]'::jsonb,
     features JSONB DEFAULT '[]'::jsonb,
     services JSONB DEFAULT '[]'::jsonb,
+    article_content TEXT NOT NULL DEFAULT '',
+    article_images JSONB DEFAULT '[]'::jsonb,
     sort_order INTEGER DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+ALTER TABLE IF EXISTS public.fields
+  ADD COLUMN IF NOT EXISTS article_content TEXT NOT NULL DEFAULT '';
+
+ALTER TABLE IF EXISTS public.fields
+  ADD COLUMN IF NOT EXISTS article_images JSONB DEFAULT '[]'::jsonb;
 
 -- Seed data for Fields
 INSERT INTO public.fields (slug, name, icon, short_desc, description, image, stats, features, services, sort_order) VALUES

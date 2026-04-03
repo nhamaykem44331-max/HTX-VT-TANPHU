@@ -10,6 +10,8 @@ export interface BusinessField {
   stats?: { label: string; value: string }[];
   features?: string[];
   services?: string[];
+  articleContent?: string;
+  articleImages?: string[];
 }
 
 // News types
