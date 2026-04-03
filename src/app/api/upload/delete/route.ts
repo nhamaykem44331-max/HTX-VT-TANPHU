@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase, isSupabaseConfigured } from '@/lib/supabase'
 import { isAuthenticated } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
@@ -10,6 +10,13 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: 'Supabase chua duoc cau hinh tren production' },
+        { status: 500 }
+      )
+    }
+
     const body = await request.json()
     const { path } = body
 
@@ -23,7 +30,9 @@ export async function POST(request: NextRequest) {
       .from('website-images')
       .remove([path])
 
-    if (error) throw error
+    if (error) {
+      throw new Error(error.message || 'Khong the xoa anh tren Supabase Storage')
+    }
 
     return NextResponse.json({ success: true })
   } catch (error: any) {

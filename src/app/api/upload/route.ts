@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabase } from '@/lib/supabase'
+import { createServerSupabase, isSupabaseConfigured } from '@/lib/supabase'
 import { isAuthenticated } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
@@ -10,6 +10,13 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    if (!isSupabaseConfigured()) {
+      return NextResponse.json(
+        { error: 'Supabase chua duoc cau hinh tren production' },
+        { status: 500 }
+      )
+    }
+
     const formData = await request.formData()
     const file = formData.get('file') as File
     const folder = (formData.get('folder') as string) || 'general'
@@ -44,7 +51,9 @@ export async function POST(request: NextRequest) {
         upsert: false,
       })
 
-    if (error) throw error
+    if (error) {
+      throw new Error(error.message || 'Khong the upload anh len Supabase Storage')
+    }
 
     // Lấy public URL
     const { data: { publicUrl } } = supabase.storage
@@ -61,7 +70,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error('Upload error:', error)
     return NextResponse.json(
-      { error: error.message || 'Upload failed' },
+      { error: error?.message || 'Upload failed' },
       { status: 500 }
     )
   }
