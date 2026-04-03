@@ -16,6 +16,7 @@ dist/
 *.pem
 .env
 .env*.local
+.env.vercel*
 
 # debug
 npm-debug.log*
@@ -32,3 +33,5 @@ next-env.d.ts
 
 # Antigravity agent skills (local tooling)
 .agent/
+
+.vercel
