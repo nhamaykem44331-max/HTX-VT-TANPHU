@@ -24,22 +24,22 @@ export default async function PartnersSection() {
         <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, var(--ivory), transparent)" }} />
         <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, var(--ivory), transparent)" }} />
 
-        <div className="flex w-max gap-6 animate-marquee-slow">
+        <div className="flex w-max items-center gap-12 animate-marquee-slow md:gap-16">
           {doubled.map((partner, i) => (
             <div
               key={`${partner.id}-${i}`}
-              className="flex h-24 min-w-[180px] flex-shrink-0 items-center justify-center rounded-sm border border-gray-100 bg-white px-6 shadow-sm transition-all duration-300 hover:border-orange-200 hover:shadow-md md:h-28 md:min-w-[220px]"
+              className="flex h-14 flex-shrink-0 items-center justify-center md:h-20"
             >
               {partner.logo?.trim() ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={partner.logo}
                   alt={partner.name}
-                  className="max-h-12 w-full object-contain md:max-h-16"
+                  className="h-full w-auto max-w-none object-contain"
                   loading="lazy"
                 />
               ) : (
-                <span className="text-center font-heading text-sm font-bold text-gray-600 whitespace-nowrap">
+                <span className="whitespace-nowrap text-center font-heading text-sm font-bold text-gray-600">
                   {partner.name}
                 </span>
               )}

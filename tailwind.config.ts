@@ -35,7 +35,7 @@ const config: Config = {
         "slide-in-left": "slideInLeft 0.6s ease-out forwards",
         "slide-in-right": "slideInRight 0.6s ease-out forwards",
         marquee: "marquee 30s linear infinite",
-        "marquee-slow": "marquee 55s linear infinite",
+        "marquee-slow": "marquee 38s linear infinite",
         bounce: "bounce 1s ease-in-out infinite",
       },
       keyframes: {
