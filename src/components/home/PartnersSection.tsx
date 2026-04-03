@@ -3,8 +3,10 @@ import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 
 export default async function PartnersSection() {
-  const flexPartners = await getPartners();
-  const doubled = [...flexPartners, ...flexPartners];
+  const partners = await getPartners();
+  const partnersWithLogos = partners.filter((partner) => Boolean(partner.logo?.trim()));
+  const showcasePartners = partnersWithLogos.length > 0 ? partnersWithLogos : partners;
+  const doubled = [...showcasePartners, ...showcasePartners];
 
   return (
     <section className="section-padding" style={{ backgroundColor: "var(--ivory)" }}>
@@ -22,16 +24,25 @@ export default async function PartnersSection() {
         <div className="absolute left-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(to right, var(--ivory), transparent)" }} />
         <div className="absolute right-0 top-0 bottom-0 w-20 z-10 pointer-events-none" style={{ background: "linear-gradient(to left, var(--ivory), transparent)" }} />
 
-        <div className="flex gap-6 animate-marquee w-max">
+        <div className="flex w-max gap-6 animate-marquee-slow">
           {doubled.map((partner, i) => (
             <div
               key={`${partner.id}-${i}`}
-              className="flex-shrink-0 h-14 px-6 bg-white rounded-sm shadow-sm border border-gray-100 flex items-center justify-center hover:shadow-md hover:border-orange-200 transition-all duration-300"
-              style={{ minWidth: "160px" }}
+              className="flex h-24 min-w-[180px] flex-shrink-0 items-center justify-center rounded-sm border border-gray-100 bg-white px-6 shadow-sm transition-all duration-300 hover:border-orange-200 hover:shadow-md md:h-28 md:min-w-[220px]"
             >
-              <span className="font-heading font-bold text-gray-600 text-sm text-center whitespace-nowrap">
-                {partner.name}
-              </span>
+              {partner.logo?.trim() ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={partner.logo}
+                  alt={partner.name}
+                  className="max-h-12 w-full object-contain md:max-h-16"
+                  loading="lazy"
+                />
+              ) : (
+                <span className="text-center font-heading text-sm font-bold text-gray-600 whitespace-nowrap">
+                  {partner.name}
+                </span>
+              )}
             </div>
           ))}
         </div>
