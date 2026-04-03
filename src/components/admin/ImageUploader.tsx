@@ -7,6 +7,10 @@ import DeleteConfirm from './DeleteConfirm'
 const MAX_UPLOAD_SIZE_BYTES = 4 * 1024 * 1024
 const MAX_UPLOAD_SIZE_LABEL = '4MB'
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml']
+const COMPRESSED_MIME_TYPE = 'image/webp'
+const MAX_IMAGE_DIMENSION = 2560
+const MIN_IMAGE_DIMENSION = 480
+const SCALE_STEP = 0.85
 
 interface ImageUploaderProps {
   value: string
@@ -23,6 +27,140 @@ interface UploadApiResponse {
   url?: string
 }
 
+interface OptimizedImageResult {
+  file: File
+  compressed: boolean
+  originalSize: number
+  finalSize: number
+}
+
+function formatBytes(bytes: number) {
+  if (bytes < 1024) return `${bytes} B`
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
+}
+
+function getFileExtensionFromMimeType(mimeType: string) {
+  if (mimeType === 'image/jpeg') return 'jpg'
+  if (mimeType === 'image/png') return 'png'
+  if (mimeType === 'image/webp') return 'webp'
+  return 'img'
+}
+
+function buildOptimizedFileName(originalName: string, mimeType: string) {
+  const baseName = originalName.replace(/\.[^/.]+$/, '') || 'image'
+  const extension = getFileExtensionFromMimeType(mimeType)
+  return `${baseName}-optimized.${extension}`
+}
+
+function loadImage(file: File): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new window.Image()
+    const objectUrl = URL.createObjectURL(file)
+
+    image.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      resolve(image)
+    }
+
+    image.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error('Khong the doc du lieu anh de toi uu.'))
+    }
+
+    image.src = objectUrl
+  })
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, mimeType: string, quality?: number) {
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => {
+        if (blob) {
+          resolve(blob)
+          return
+        }
+
+        reject(new Error('Khong the tao file anh toi uu.'))
+      },
+      mimeType,
+      quality
+    )
+  })
+}
+
+async function compressImageToLimit(file: File): Promise<OptimizedImageResult> {
+  if (file.size <= MAX_UPLOAD_SIZE_BYTES) {
+    return {
+      file,
+      compressed: false,
+      originalSize: file.size,
+      finalSize: file.size,
+    }
+  }
+
+  if (file.type === 'image/svg+xml') {
+    throw new Error('SVG qua lon khong the tu dong nen. Vui long xuat lai SVG nho hon hoac doi sang PNG/JPG/WebP.')
+  }
+
+  const image = await loadImage(file)
+  const aspectRatio = image.naturalWidth / image.naturalHeight
+
+  let width = image.naturalWidth
+  let height = image.naturalHeight
+
+  if (Math.max(width, height) > MAX_IMAGE_DIMENSION) {
+    if (width >= height) {
+      width = MAX_IMAGE_DIMENSION
+      height = Math.round(width / aspectRatio)
+    } else {
+      height = MAX_IMAGE_DIMENSION
+      width = Math.round(height * aspectRatio)
+    }
+  }
+
+  const canvas = document.createElement('canvas')
+  const context = canvas.getContext('2d')
+
+  if (!context) {
+    throw new Error('Trinh duyet khong ho tro toi uu anh bang canvas.')
+  }
+
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const quality = Math.max(0.35, 0.9 - attempt * 0.07)
+    canvas.width = width
+    canvas.height = height
+    context.clearRect(0, 0, width, height)
+    context.drawImage(image, 0, 0, width, height)
+
+    const blob = await canvasToBlob(canvas, COMPRESSED_MIME_TYPE, quality)
+    if (blob.size <= MAX_UPLOAD_SIZE_BYTES) {
+      const optimizedFile = new File([blob], buildOptimizedFileName(file.name, blob.type), {
+        type: blob.type,
+        lastModified: Date.now(),
+      })
+
+      return {
+        file: optimizedFile,
+        compressed: true,
+        originalSize: file.size,
+        finalSize: blob.size,
+      }
+    }
+
+    const canReduceWidth = width > MIN_IMAGE_DIMENSION
+    const canReduceHeight = height > MIN_IMAGE_DIMENSION
+    if (!canReduceWidth && !canReduceHeight) {
+      continue
+    }
+
+    width = Math.max(MIN_IMAGE_DIMENSION, Math.round(width * SCALE_STEP))
+    height = Math.max(MIN_IMAGE_DIMENSION, Math.round(height * SCALE_STEP))
+  }
+
+  throw new Error(`Khong the tu dong giam anh xuong duoi ${MAX_UPLOAD_SIZE_LABEL}. Vui long nen anh truoc khi tai len.`)
+}
+
 export default function ImageUploader({
   value,
   onChange,
@@ -34,6 +172,8 @@ export default function ImageUploader({
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
   const [errorMsg, setErrorMsg] = useState('')
+  const [noticeMsg, setNoticeMsg] = useState('')
+  const [uploadStage, setUploadStage] = useState<'compressing' | 'uploading' | null>(null)
   const [showUrlInput, setShowUrlInput] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [tempUrl, setTempUrl] = useState('')
@@ -77,36 +217,43 @@ export default function ImageUploader({
       rawError.includes('Request Entity Too Large') ||
       rawError.includes('FUNCTION_PAYLOAD_TOO_LARGE')
     ) {
-      return `Anh qua lon de upload qua Vercel. Vui long chon file duoi ${MAX_UPLOAD_SIZE_LABEL}.`
+      return `Anh qua lon de upload qua Vercel. He thong da co gang toi uu nhung van chua duoi ${MAX_UPLOAD_SIZE_LABEL}.`
     }
 
     return rawError || 'Upload that bai'
   }
 
-  const handleUpload = async (file: File) => {
-    if (!file) return
+  const handleUpload = async (selectedFile: File) => {
+    if (!selectedFile) return
 
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(selectedFile.type)) {
       setErrorMsg('Chi chap nhan file anh JPEG, PNG, WebP hoac SVG')
-      return
-    }
-
-    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
-      setErrorMsg(`File qua lon. Vui long chon anh toi da ${MAX_UPLOAD_SIZE_LABEL}.`)
       return
     }
 
     setIsUploading(true)
     setErrorMsg('')
-    setProgress(10)
+    setNoticeMsg('')
+    setUploadStage(selectedFile.size > MAX_UPLOAD_SIZE_BYTES ? 'compressing' : 'uploading')
+    setProgress(8)
 
     const interval = setInterval(() => {
-      setProgress((current) => (current < 90 ? current + 10 : current))
-    }, 200)
+      setProgress((current) => (current < 90 ? current + 8 : current))
+    }, 220)
 
     try {
+      const optimized = await compressImageToLimit(selectedFile)
+
+      if (optimized.compressed) {
+        setNoticeMsg(
+          `Anh da duoc tu dong toi uu tu ${formatBytes(optimized.originalSize)} xuong ${formatBytes(optimized.finalSize)}.`
+        )
+      }
+
+      setUploadStage('uploading')
+
       const formData = new FormData()
-      formData.append('file', file)
+      formData.append('file', optimized.file)
       formData.append('folder', folder)
 
       const res = await fetch('/api/upload', {
@@ -124,11 +271,13 @@ export default function ImageUploader({
       onChange(data.url)
     } catch (err: any) {
       setErrorMsg(err?.message || 'Upload that bai')
+      setNoticeMsg('')
     } finally {
       clearInterval(interval)
       setTimeout(() => {
         setIsUploading(false)
         setProgress(0)
+        setUploadStage(null)
       }, 500)
     }
   }
@@ -138,6 +287,7 @@ export default function ImageUploader({
 
     setShowDeleteConfirm(false)
     setErrorMsg('')
+    setNoticeMsg('')
     onChange('')
 
     if (!pathToDelete) return
@@ -167,6 +317,7 @@ export default function ImageUploader({
     if (!tempUrl.trim()) return
 
     setErrorMsg('')
+    setNoticeMsg('')
     onChange(tempUrl.trim())
     setShowUrlInput(false)
     setTempUrl('')
@@ -189,6 +340,9 @@ export default function ImageUploader({
       handleUpload(e.dataTransfer.files[0])
     }
   }
+
+  const uploadStageLabel =
+    uploadStage === 'compressing' ? 'Dang toi uu anh truoc khi tai len...' : 'Dang tai anh...'
 
   return (
     <div className={`space-y-2 ${className}`}>
@@ -257,7 +411,7 @@ export default function ImageUploader({
           ].join(' ')}
         >
           {isUploading ? (
-            <div className="flex w-full max-w-[200px] flex-col items-center gap-3">
+            <div className="flex w-full max-w-[220px] flex-col items-center gap-3">
               <Loader2 className="animate-spin text-orange-500" size={28} />
               <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-200">
                 <div
@@ -265,7 +419,7 @@ export default function ImageUploader({
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <p className="mt-1 text-xs font-medium text-gray-500">Dang tai anh... {progress}%</p>
+              <p className="mt-1 text-xs font-medium text-gray-500">{uploadStageLabel} {progress}%</p>
             </div>
           ) : (
             <>
@@ -273,15 +427,21 @@ export default function ImageUploader({
                 <UploadCloud className="text-gray-400" size={24} />
               </div>
               <p className="text-sm font-semibold text-gray-700">Keo tha anh vao day hoac click de chon</p>
-              <p className="mt-1 text-xs text-gray-400">JPEG, PNG, WebP - Toi da {MAX_UPLOAD_SIZE_LABEL}</p>
+              <p className="mt-1 text-xs text-gray-400">
+                JPEG, PNG, WebP - Tu dong toi uu neu vuot {MAX_UPLOAD_SIZE_LABEL}
+              </p>
             </>
           )}
         </div>
       )}
 
-      {!value && !showUrlInput && !isUploading ? (
-        <div className="mt-2 flex items-center justify-between px-1">
-          {errorMsg ? <p className="text-xs font-medium text-red-500">{errorMsg}</p> : <div />}
+      <div className="mt-2 flex items-center justify-between px-1">
+        <div className="space-y-1">
+          {errorMsg ? <p className="text-xs font-medium text-red-500">{errorMsg}</p> : null}
+          {noticeMsg ? <p className="text-xs font-medium text-emerald-600">{noticeMsg}</p> : null}
+        </div>
+
+        {!value && !showUrlInput && !isUploading ? (
           <button
             type="button"
             onClick={() => setShowUrlInput(true)}
@@ -289,8 +449,10 @@ export default function ImageUploader({
           >
             <LinkIcon size={12} /> Hoac nhap URL
           </button>
-        </div>
-      ) : null}
+        ) : (
+          <div />
+        )}
+      </div>
 
       <input
         type="file"
