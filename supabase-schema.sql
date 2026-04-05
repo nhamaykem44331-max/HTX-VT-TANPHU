@@ -106,6 +106,19 @@ CREATE TABLE site_settings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- 6.1 Tài khoản admin
+CREATE TABLE IF NOT EXISTS admin_users (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  username TEXT NOT NULL UNIQUE,
+  display_name TEXT DEFAULT '',
+  password_hash TEXT NOT NULL,
+  is_active BOOLEAN DEFAULT true,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE admin_users ENABLE ROW LEVEL SECURITY;
+
 -- ============================================================
 -- Indexes
 -- ============================================================
@@ -114,6 +127,7 @@ CREATE INDEX idx_news_date ON news(date DESC);
 CREATE INDEX idx_news_published ON news(published);
 CREATE INDEX idx_jobs_published ON jobs(published);
 CREATE INDEX idx_contact_status ON contact_submissions(status);
+CREATE INDEX idx_admin_users_username ON admin_users(username);
 
 -- ============================================================
 -- Auto updated_at trigger
@@ -125,6 +139,7 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER news_updated BEFORE UPDATE ON news FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 CREATE TRIGGER jobs_updated BEFORE UPDATE ON jobs FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+CREATE TRIGGER admin_users_updated BEFORE UPDATE ON admin_users FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
 -- ============================================================
 -- 7. Homepage Sections

@@ -176,6 +176,7 @@ async function run() {
 
     await executeIfExists('supabase-fields-article-migration.sql', 'fields article migration')
     await executeIfExists('supabase-partners-seed.sql', 'partners seed migration')
+    await executeIfExists('supabase-admin-users-migration.sql', 'admin users migration')
 
     console.log('Ensuring storage bucket and policies...')
     await ensureStorage()
