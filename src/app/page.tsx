@@ -45,7 +45,7 @@ export const metadata: Metadata = {
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên: vận tải, cẩu lắp, thép, khách sạn, vé máy bay, nông nghiệp hữu cơ.",
     images: [
       {
-        url: "https://htxtanphu.com/og-image.jpg",
+        url: "https://htxtanphu.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "HTX Vận tải Ô tô Tân Phú — Thái Nguyên",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     title: "HTX Vận tải Ô tô Tân Phú — 30 năm hòa hợp cùng phát triển",
     description:
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên với 7 lĩnh vực kinh doanh.",
-    images: ["https://htxtanphu.com/og-image.jpg"],
+    images: ["https://htxtanphu.com/og-image.png"],
   },
   robots: {
     index: true,

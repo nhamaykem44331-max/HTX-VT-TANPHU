@@ -34,7 +34,7 @@ export const metadata: Metadata = {
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên với 7 lĩnh vực kinh doanh, doanh thu ~3.000 tỷ/năm.",
     images: [
       {
-        url: "/og-image.jpg",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
         alt: "HTX Vận tải Ô tô Tân Phú",
@@ -114,4 +114,3 @@ export default async function RootLayout({
     </html>
   );
 }
-

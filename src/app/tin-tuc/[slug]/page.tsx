@@ -23,11 +23,29 @@ export async function generateMetadata({
   return {
     title: `${article.title} — HTX Tân Phú`,
     description: article.excerpt,
+    alternates: {
+      canonical: `https://htxtanphu.com/tin-tuc/${params.slug}`,
+    },
     openGraph: {
       title: article.title,
       description: article.excerpt,
       type: "article",
+      url: `https://htxtanphu.com/tin-tuc/${params.slug}`,
       publishedTime: article.date,
+      images: [
+        {
+          url: "https://htxtanphu.com/og-image.png",
+          width: 945,
+          height: 945,
+          alt: "Logo HTX Tan Phu",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary",
+      title: article.title,
+      description: article.excerpt,
+      images: ["https://htxtanphu.com/og-image.png"],
     },
   };
 }

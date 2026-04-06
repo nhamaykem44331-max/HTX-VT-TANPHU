@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     url: "https://htxtanphu.com/lien-he",
     title: "Liên hệ HTX Tân Phú — Hotline 0208.383.2608",
     description: "Liên hệ HTX Vận tải Ô tô Tân Phú tại Thái Nguyên. Tư vấn vận tải hàng hóa, cẩu lắp đặt, khách sạn Phương Anh.",
-    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
   },
 };
 

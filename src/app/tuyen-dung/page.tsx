@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     url: "https://htxtanphu.com/tuyen-dung",
     title: "Tuyển dụng — HTX Vận tải Ô tô Tân Phú",
     description: "Cơ hội việc làm tại HTX Tân Phú: vận tải, cẩu lắp, khách sạn, kinh doanh thép. Thu nhập cạnh tranh, môi trường chuyên nghiệp.",
-    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
   },
 };
 

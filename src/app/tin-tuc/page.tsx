@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: "https://htxtanphu.com/tin-tuc",
     title: "Tin tức & Sự kiện — HTX Tân Phú",
     description: "Cập nhật tin tức mới nhất về hoạt động của HTX Vận tải Ô tô Tân Phú.",
-    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
   },
 };
 

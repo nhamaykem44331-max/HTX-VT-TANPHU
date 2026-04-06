@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: "https://htxtanphu.com/gioi-thieu",
     title: "Giới thiệu HTX Tân Phú — 30 năm hòa hợp cùng phát triển",
     description: "Tìm hiểu về HTX Vận tải Ô tô Tân Phú: lịch sử, sứ mệnh, ban lãnh đạo và thành tích 30 năm.",
-    images: [{ url: "https://htxtanphu.com/og-image.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
   },
 };
 
