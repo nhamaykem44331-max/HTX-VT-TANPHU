@@ -25,8 +25,9 @@ export const metadata: Metadata = {
 
 // Server Component: exports metadata ✓, delegates interactivity to Client Component
 import { getJobs } from "@/lib/data-service";
+import { getPageEditorContent } from "@/lib/page-content";
 
 export default async function TuyenDungPage() {
-  const jobs = await getJobs();
-  return <TuyenDungClient initialJobs={jobs} />;
+  const [jobs, pageContent] = await Promise.all([getJobs(), getPageEditorContent()]);
+  return <TuyenDungClient initialJobs={jobs} pageContent={pageContent.tuyenDung} />;
 }

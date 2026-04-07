@@ -1,111 +1,125 @@
-import type { Metadata } from "next";
-import Breadcrumb from "@/components/shared/Breadcrumb";
-import SectionHeading from "@/components/shared/SectionHeading";
-import ScrollReveal from "@/components/shared/ScrollReveal";
-import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
-import { CheckCircle } from "lucide-react";
+import type { Metadata } from 'next'
+import { CheckCircle } from 'lucide-react'
+import Breadcrumb from '@/components/shared/Breadcrumb'
+import ImagePlaceholder from '@/components/shared/ImagePlaceholder'
+import ScrollReveal from '@/components/shared/ScrollReveal'
+import SectionHeading from '@/components/shared/SectionHeading'
+import { getEquipments } from '@/lib/data-service'
+import { getPageEditorContent } from '@/lib/page-content'
 
 export const metadata: Metadata = {
-  title: "Năng lực & Thiết bị — HTX Tân Phú",
-  description: "Hệ thống thiết bị hiện đại của HTX Tân Phú: đội xe 26 tải, 9 cần cẩu đến 330 tấn, kho bãi 10.000m², công nghệ quản lý tiên tiến.",
-};
+  title: 'Năng lực & Thiết bị — HTX Tân Phú',
+  description:
+    'Hệ thống thiết bị hiện đại của HTX Tân Phú: đội xe, cần cẩu, kho bãi và công nghệ quản lý phục vụ đa lĩnh vực.',
+}
 
-const equipment = [
-  { name: "Xe tải 40 tấn", category: "Xe tải", qty: "2 xe", desc: "Hyundai Xcient, GPS Vietmap, Euro 4" },
-  { name: "Xe tải 20–30 tấn", category: "Xe tải", qty: "8 xe", desc: "Tải trọng cao, vận chuyển hàng công nghiệp" },
-  { name: "Xe tải 5–15 tấn", category: "Xe tải", qty: "11 xe", desc: "Linh hoạt, giao hàng nội thành và ngoại ô" },
-  { name: "Xe tải nhỏ 1.5–3 tấn", category: "Xe tải", qty: "5 xe", desc: "Giao hàng tuyến ngắn, nhanh chóng" },
-  { name: "Xe khách 29 chỗ", category: "Xe tải", qty: "5 xe", desc: "Thuê xe hợp đồng nội ngoại tỉnh" },
-  { name: "Cần cẩu 330 tấn", category: "Cần cẩu", qty: "1 chiếc", desc: "Liebherr LTM 1300, lớn nhất khu vực" },
-  { name: "Cần cẩu 100–150 tấn", category: "Cần cẩu", qty: "3 chiếc", desc: "Lắp đặt thiết bị nhà máy, công trình lớn" },
-  { name: "Cần cẩu 50–80 tấn", category: "Cần cẩu", qty: "3 chiếc", desc: "Đa năng, thi công công trình vừa" },
-  { name: "Cần cẩu 20–30 tấn", category: "Cần cẩu", qty: "2 chiếc", desc: "Cẩu hàng kho bãi, lắp đặt thiết bị nhỏ" },
-  { name: "Kho bãi Yên Bình", category: "Kho bãi", qty: "5.000m²", desc: "Kho chứa thép, có hệ thống PCCC" },
-  { name: "Kho bãi Tích Lương", category: "Kho bãi", qty: "5.000m²", desc: "Trung chuyển hàng hóa đa loại" },
-  { name: "GPS Vietmap Fleet", category: "Công nghệ", qty: "31 xe", desc: "Theo dõi đội xe 24/7, cảnh báo tốc độ" },
-  { name: "Skyhotel PMS", category: "Công nghệ", qty: "1 hệ thống", desc: "Quản lý khách sạn, checkin, báo cáo" },
-  { name: "GDS Amadeus", category: "Công nghệ", qty: "1 hệ thống", desc: "Đặt vé toàn cầu, 1000+ hãng bay" },
-  { name: "Base.vn HRM", category: "Công nghệ", qty: "1 hệ thống", desc: "Quản lý nhân sự 150+ người" },
-];
+export default async function NangLucPage() {
+  const [equipments, pageContent] = await Promise.all([getEquipments(), getPageEditorContent()])
+  const content = pageContent.nangLuc
 
-const categories = ["Tất cả", "Xe tải", "Cần cẩu", "Kho bãi", "Công nghệ"];
-
-export default function NangLucPage() {
   return (
     <div>
-      <div className="relative" style={{ backgroundColor: "var(--navy)" }}>
-        <div className="container-wide py-16">
-          <Breadcrumb items={[{ label: "Năng lực & Thiết bị" }]} />
-          <h1 className="font-heading font-black text-white text-4xl md:text-5xl mt-4">
-            Năng lực & Thiết bị
+      <div className="relative" style={{ backgroundColor: 'var(--navy)' }}>
+        {content.bannerImage ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={content.bannerImage}
+              alt={content.bannerTitle}
+              className="absolute inset-0 h-full w-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-navy/60" />
+          </>
+        ) : null}
+
+        <div className="relative container-wide py-16">
+          <Breadcrumb items={[{ label: 'Năng lực & Thiết bị' }]} />
+          <h1 className="mt-4 font-heading text-4xl font-black text-white md:text-5xl">
+            {content.bannerTitle}
           </h1>
-          <p className="text-blue-200 text-lg mt-2">Cơ sở vật chất hiện đại — Đảm bảo chất lượng dịch vụ</p>
+          <p className="mt-2 text-lg text-blue-200">{content.bannerSubtitle}</p>
         </div>
       </div>
 
       <div className="container-wide section-padding">
-        {/* Overview */}
         <ScrollReveal>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16">
-            {[
-              { value: "26+", label: "Đầu xe tải các loại", color: "var(--orange)" },
-              { value: "9", label: "Cần cẩu (max 330T)", color: "var(--teal)" },
-              { value: "10.000m²", label: "Nhà xưởng & Kho bãi", color: "var(--navy)" },
-              { value: "35 tỷ", label: "Vốn cố định", color: "#6366f1" },
-            ].map((item) => (
-              <div key={item.label} className="text-center p-6 rounded-sm bg-gray-50 border-2 border-transparent hover:border-orange-200 transition-colors">
-                <div className="font-heading font-black text-3xl mb-2" style={{ color: item.color }}>{item.value}</div>
-                <p className="text-gray-500 text-sm">{item.label}</p>
+          <div className="mb-16 grid grid-cols-2 gap-6 md:grid-cols-4">
+            {content.overviewStats.map((item) => (
+              <div
+                key={`${item.label}-${item.value}`}
+                className="rounded-sm border-2 border-transparent bg-gray-50 p-6 text-center transition-colors hover:border-orange-200"
+              >
+                <div className="mb-2 font-heading text-3xl font-black" style={{ color: item.color || 'var(--orange)' }}>
+                  {item.value}
+                </div>
+                <p className="text-sm text-gray-500">{item.label}</p>
               </div>
             ))}
           </div>
         </ScrollReveal>
 
-        <SectionHeading title="HỆ THỐNG THIẾT BỊ" subtitle="Đầu tư không ngừng để đáp ứng mọi yêu cầu khách hàng" />
+        <SectionHeading title={content.equipmentTitle} subtitle={content.equipmentSubtitle} />
 
-        {/* Equipment grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {equipment.map((eq, i) => (
-            <ScrollReveal key={i} delay={i * 0.04}>
-              <div className="bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100">
-                <ImagePlaceholder label={eq.name} aspectRatio="video" className="rounded-none" iconSize={24} />
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {equipments.map((equipment: any, index: number) => (
+            <ScrollReveal key={`${equipment.id || equipment.name}-${index}`} delay={index * 0.04}>
+              <div className="overflow-hidden rounded-sm border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md">
+                <div className="overflow-hidden">
+                  {equipment.image ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={equipment.image}
+                      alt={equipment.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <ImagePlaceholder
+                      label={equipment.name}
+                      aspectRatio="video"
+                      className="rounded-none"
+                      iconSize={24}
+                    />
+                  )}
+                </div>
                 <div className="p-5">
-                  <div className="flex items-start justify-between mb-2">
-                    <h3 className="font-heading font-bold text-gray-900 text-sm flex-1">{eq.name}</h3>
-                    <span className="ml-2 px-2 py-0.5 rounded-sm text-xs font-semibold text-white flex-shrink-0" style={{ backgroundColor: "var(--teal)" }}>
-                      {eq.qty}
+                  <div className="mb-2 flex items-start justify-between gap-3">
+                    <h3 className="flex-1 font-heading text-sm font-bold text-gray-900">{equipment.name}</h3>
+                    <span
+                      className="rounded-sm px-2 py-0.5 text-xs font-semibold text-white"
+                      style={{ backgroundColor: 'var(--teal)' }}
+                    >
+                      {equipment.qty || equipment.quantity || equipment.category}
                     </span>
                   </div>
-                  <p className="text-gray-500 text-xs leading-relaxed">{eq.desc}</p>
-                  <span className="inline-block mt-2 text-xs text-orange-500 font-semibold">{eq.category}</span>
+                  <p className="text-xs leading-relaxed text-gray-500">{equipment.description || equipment.desc}</p>
+                  <span className="mt-2 inline-block text-xs font-semibold text-orange-500">
+                    {equipment.category}
+                  </span>
                 </div>
               </div>
             </ScrollReveal>
           ))}
         </div>
 
-        {/* Certifications */}
-        <ScrollReveal delay={0.2}>
-          <div className="mt-16 p-8 rounded-sm" style={{ backgroundColor: "var(--ivory)" }}>
-            <SectionHeading title="CHỨNG NHẬN & TIÊU CHUẨN" subtitle="Hoạt động đúng pháp luật, đảm bảo an toàn tuyệt đối" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {[
-                "Giấy phép kinh doanh vận tải hàng hóa hợp lệ",
-                "Chứng nhận an toàn lao động cẩu lắp đặt",
-                "Chứng nhận VietGAP nông nghiệp hữu cơ",
-                "Đại lý vé máy bay cấp 1 được BSP cấp phép",
-                "Tiêu chuẩn phòng cháy chữa cháy kho bãi",
-                "Kiểm định định kỳ toàn bộ phương tiện",
-              ].map((cert, i) => (
-                <div key={i} className="flex items-start gap-3 p-4 bg-white rounded-sm shadow-sm">
-                  <CheckCircle size={16} className="text-teal-500 flex-shrink-0 mt-0.5" />
-                  <p className="text-gray-700 text-sm">{cert}</p>
-                </div>
-              ))}
+        {content.certifications.length > 0 ? (
+          <ScrollReveal delay={0.2}>
+            <div className="mt-16 rounded-sm p-8" style={{ backgroundColor: 'var(--ivory)' }}>
+              <SectionHeading
+                title={content.certificationsTitle}
+                subtitle={content.certificationsSubtitle}
+              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {content.certifications.map((certificate, index) => (
+                  <div key={`${certificate}-${index}`} className="flex items-start gap-3 rounded-sm bg-white p-4 shadow-sm">
+                    <CheckCircle size={16} className="mt-0.5 flex-shrink-0 text-teal-500" />
+                    <p className="text-sm text-gray-700">{certificate}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </ScrollReveal>
+          </ScrollReveal>
+        ) : null}
       </div>
     </div>
-  );
+  )
 }

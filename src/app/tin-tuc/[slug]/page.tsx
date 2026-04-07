@@ -34,10 +34,10 @@ export async function generateMetadata({
       publishedTime: article.date,
       images: [
         {
-          url: "https://htxtanphu.com/og-image.png",
+          url: article.image || "https://htxtanphu.com/og-image.png",
           width: 945,
           height: 945,
-          alt: "Logo HTX Tan Phu",
+          alt: article.title,
         },
       ],
     },
@@ -45,7 +45,7 @@ export async function generateMetadata({
       card: "summary",
       title: article.title,
       description: article.excerpt,
-      images: ["https://htxtanphu.com/og-image.png"],
+      images: [article.image || "https://htxtanphu.com/og-image.png"],
     },
   };
 }
@@ -115,11 +115,20 @@ export default async function TinTucDetailPage({
             </h1>
 
             {/* Featured image */}
-            <ImagePlaceholder
-              label={article.title}
-              aspectRatio="video"
-              className="rounded-2xl mb-8"
-            />
+            {article.image ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={article.image}
+                alt={article.title}
+                className="mb-8 w-full rounded-2xl object-cover"
+              />
+            ) : (
+              <ImagePlaceholder
+                label={article.title}
+                aspectRatio="video"
+                className="rounded-2xl mb-8"
+              />
+            )}
 
             {/* Excerpt */}
             <p className="text-gray-600 text-lg leading-relaxed mb-6 font-medium border-l-4 pl-5 italic" style={{ borderColor: "var(--orange)" }}>
@@ -163,12 +172,17 @@ export default async function TinTucDetailPage({
                       className="group flex gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow border border-gray-100"
                     >
                       <div className="flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden">
-                        <ImagePlaceholder
-                          label=""
-                          className="w-20 h-20 rounded-none"
-                          aspectRatio="square"
-                          iconSize={18}
-                        />
+                        {rel.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={rel.image} alt={rel.title} className="h-20 w-20 object-cover" />
+                        ) : (
+                          <ImagePlaceholder
+                            label=""
+                            className="w-20 h-20 rounded-none"
+                            aspectRatio="square"
+                            iconSize={18}
+                          />
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <span className="text-xs text-orange-500 font-semibold">

@@ -1,89 +1,92 @@
-import type { Metadata } from "next";
-import { Phone, Mail, MapPin, Clock, Facebook } from "lucide-react";
-import Breadcrumb from "@/components/shared/Breadcrumb";
-import SectionHeading from "@/components/shared/SectionHeading";
-import ScrollReveal from "@/components/shared/ScrollReveal";
-import ContactForm from "@/components/shared/ContactForm";
-import { COMPANY_INFO } from "@/lib/constants";
+import type { Metadata } from 'next'
+import { Clock, Facebook, Mail, MapPin, Phone } from 'lucide-react'
+import Breadcrumb from '@/components/shared/Breadcrumb'
+import ContactForm from '@/components/shared/ContactForm'
+import ScrollReveal from '@/components/shared/ScrollReveal'
+import SectionHeading from '@/components/shared/SectionHeading'
+import { getPageEditorContent } from '@/lib/page-content'
 
-// @seo-audit: added canonical, openGraph, keywords
 export const metadata: Metadata = {
-  title: "Liên hệ HTX Tân Phú — Hotline 0208.383.2608",
-  description: "Liên hệ HTX Vận tải Ô tô Tân Phú: trụ sở Thái Nguyên, chi nhánh Sóc Sơn, Phúc Yên, Hòa Bình. Hotline: 0208.383.2608. Tư vấn dịch vụ vận tải, cẩu lắp, khách sạn.",
-  keywords: ["liên hệ HTX Tân Phú", "hotline vận tải Thái Nguyên", "tư vấn vận tải hàng hóa"],
-  alternates: { canonical: "https://htxtanphu.com/lien-he" },
+  title: 'Liên hệ HTX Tân Phú — Hotline 0208.383.2608',
+  description:
+    'Liên hệ HTX Vận tải Ô tô Tân Phú: trụ sở Thái Nguyên, chi nhánh và hotline tư vấn dịch vụ vận tải, cẩu lắp, khách sạn.',
+  keywords: ['liên hệ HTX Tân Phú', 'hotline vận tải Thái Nguyên', 'tư vấn vận tải hàng hóa'],
+  alternates: { canonical: 'https://htxtanphu.com/lien-he' },
   openGraph: {
-    type: "website",
-    locale: "vi_VN",
-    url: "https://htxtanphu.com/lien-he",
-    title: "Liên hệ HTX Tân Phú — Hotline 0208.383.2608",
-    description: "Liên hệ HTX Vận tải Ô tô Tân Phú tại Thái Nguyên. Tư vấn vận tải hàng hóa, cẩu lắp đặt, khách sạn Phương Anh.",
-    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
+    type: 'website',
+    locale: 'vi_VN',
+    url: 'https://htxtanphu.com/lien-he',
+    title: 'Liên hệ HTX Tân Phú — Hotline 0208.383.2608',
+    description: 'Liên hệ HTX Vận tải Ô tô Tân Phú tại Thái Nguyên và các đầu mối tư vấn dịch vụ.',
+    images: [{ url: 'https://htxtanphu.com/og-image.png', width: 945, height: 945 }],
   },
-};
+}
 
-const branches = [
-  {
-    name: "Trụ sở chính — Thái Nguyên",
-    address: "Tổ 13, Phường Cam Giá, TP. Thái Nguyên",
-    phone: "0208.383.2608",
-    hours: "Thứ 2 – Thứ 7: 7:30 – 17:30",
-    mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.0!2d105.84!3d21.59!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjHCsDM1JzI0LjAiTiAxMDXCsDUwJzI0LjAiRQ!5e0!3m2!1svi!2svn!4v1234567890",
-    main: true,
-  },
-  {
-    name: "Chi nhánh Hà Nội",
-    address: "Sóc Sơn, Hà Nội",
-    phone: "0208.383.2608",
-    hours: "Thứ 2 – Thứ 7: 8:00 – 17:00",
-    main: false,
-  },
-  {
-    name: "Chi nhánh Vĩnh Phúc",
-    address: "Phúc Yên, Vĩnh Phúc",
-    phone: "0208.383.2608",
-    hours: "Thứ 2 – Thứ 7: 8:00 – 17:00",
-    main: false,
-  },
-  {
-    name: "Chi nhánh Hòa Bình",
-    address: "Hòa Bình",
-    phone: "0208.383.2608",
-    hours: "Thứ 2 – Thứ 7: 8:00 – 17:00",
-    main: false,
-  },
-];
+function toTelHref(phone: string) {
+  return phone.replace(/[^\d+]/g, '')
+}
 
-export default function LienHePage() {
+export default async function LienHePage() {
+  const pageContent = await getPageEditorContent()
+  const content = pageContent.lienHe
+  const otherBranches = content.branches.filter((branch) => !branch.main)
+
   return (
     <div>
-      <div className="relative" style={{ backgroundColor: "var(--navy)" }}>
-        <div className="container-wide py-16">
-          <Breadcrumb items={[{ label: "Liên hệ" }]} />
-          <h1 className="font-heading font-black text-white text-4xl md:text-5xl mt-4">
-            Liên hệ với chúng tôi
+      <div className="relative" style={{ backgroundColor: 'var(--navy)' }}>
+        {content.bannerImage ? (
+          <>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={content.bannerImage}
+              alt={content.bannerTitle}
+              className="absolute inset-0 h-full w-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-navy/60" />
+          </>
+        ) : null}
+
+        <div className="relative container-wide py-16">
+          <Breadcrumb items={[{ label: 'Liên hệ' }]} />
+          <h1 className="mt-4 font-heading text-4xl font-black text-white md:text-5xl">
+            {content.bannerTitle}
           </h1>
-          <p className="text-blue-200 text-lg mt-2">Luôn sẵn sàng hỗ trợ bạn mọi lúc</p>
+          <p className="mt-2 text-lg text-blue-200">{content.bannerSubtitle}</p>
         </div>
       </div>
 
-      {/* Quick contact bar */}
-      <div style={{ backgroundColor: "var(--orange)" }}>
+      <div style={{ backgroundColor: 'var(--orange)' }}>
         <div className="container-wide py-4">
-          <div className="flex flex-wrap gap-6 justify-center md:justify-between items-center">
-            <a href={`tel:${COMPANY_INFO.hotlineTel}`} className="flex items-center gap-2 text-white font-semibold text-sm hover:text-white/80 transition-colors">
+          <div className="flex flex-wrap items-center justify-center gap-6 md:justify-between">
+            <a
+              href={`tel:${toTelHref(content.headquartersPhone)}`}
+              className="flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
+            >
               <Phone size={16} />
-              Hotline: {COMPANY_INFO.hotline}
+              Hotline: {content.quickHotlineLabel}
             </a>
-            <a href={`mailto:${COMPANY_INFO.email}`} className="flex items-center gap-2 text-white font-semibold text-sm hover:text-white/80 transition-colors">
+            <a
+              href={`mailto:${content.headquartersEmail}`}
+              className="flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
+            >
               <Mail size={16} />
-              {COMPANY_INFO.email}
+              {content.quickEmailLabel}
             </a>
-            <a href={COMPANY_INFO.zalo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-semibold text-sm hover:text-white/80 transition-colors">
-              <span className="w-4 h-4 rounded-sm flex items-center justify-center bg-white/20 text-xs font-black">Z</span>
+            <a
+              href={content.zaloUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
+            >
+              <span className="flex h-4 w-4 items-center justify-center rounded-sm bg-white/20 text-xs font-black">Z</span>
               Chat Zalo
             </a>
-            <a href={COMPANY_INFO.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white font-semibold text-sm hover:text-white/80 transition-colors">
+            <a
+              href={content.facebookUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-semibold text-white transition-colors hover:text-white/80"
+            >
               <Facebook size={16} />
               Facebook
             </a>
@@ -92,92 +95,95 @@ export default function LienHePage() {
       </div>
 
       <div className="container-wide section-padding">
-        {/* Main grid: form + info */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16">
-          {/* Form */}
+        <div className="mb-16 grid grid-cols-1 gap-12 lg:grid-cols-5">
           <ScrollReveal className="lg:col-span-3">
-            <div className="bg-white rounded-sm shadow-sm border border-gray-100 p-8">
-              <SectionHeading title="GỬI YÊU CẦU TƯ VẤN" subtitle="Điền thông tin và chúng tôi sẽ phản hồi trong 24 giờ làm việc" centered={false} />
+            <div className="rounded-sm border border-gray-100 bg-white p-8 shadow-sm">
+              <SectionHeading
+                title={content.consultationTitle}
+                subtitle={content.consultationSubtitle}
+                centered={false}
+              />
               <ContactForm title="" />
             </div>
           </ScrollReveal>
 
-          {/* Contact info */}
           <ScrollReveal delay={0.1} className="lg:col-span-2">
             <div className="space-y-6">
-              {/* Main office */}
-              <div className="p-6 rounded-sm border-2 border-orange-200" style={{ backgroundColor: "var(--ivory)" }}>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-2 h-2 rounded-sm bg-orange-500" />
-                  <h3 className="font-heading font-bold text-gray-900">Trụ sở chính</h3>
+              <div className="rounded-sm border-2 border-orange-200 p-6" style={{ backgroundColor: 'var(--ivory)' }}>
+                <div className="mb-4 flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-sm bg-orange-500" />
+                  <h3 className="font-heading font-bold text-gray-900">{content.headquartersTitle}</h3>
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <MapPin size={16} className="text-orange-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-600 text-sm">Tổ 13, Phường Cam Giá, TP. Thái Nguyên</p>
+                    <MapPin size={16} className="mt-0.5 flex-shrink-0 text-orange-400" />
+                    <p className="text-sm text-gray-600">{content.headquartersAddress}</p>
                   </div>
                   <div className="flex gap-3">
-                    <Phone size={16} className="text-orange-400 flex-shrink-0 mt-0.5" />
-                    <a href={`tel:${COMPANY_INFO.hotlineTel}`} className="text-gray-600 text-sm hover:text-orange-500 transition-colors">
-                      {COMPANY_INFO.hotline}
+                    <Phone size={16} className="mt-0.5 flex-shrink-0 text-orange-400" />
+                    <a
+                      href={`tel:${toTelHref(content.headquartersPhone)}`}
+                      className="text-sm text-gray-600 transition-colors hover:text-orange-500"
+                    >
+                      {content.headquartersPhone}
                     </a>
                   </div>
                   <div className="flex gap-3">
-                    <Mail size={16} className="text-orange-400 flex-shrink-0 mt-0.5" />
-                    <a href={`mailto:${COMPANY_INFO.email}`} className="text-gray-600 text-sm hover:text-orange-500 transition-colors">
-                      {COMPANY_INFO.email}
+                    <Mail size={16} className="mt-0.5 flex-shrink-0 text-orange-400" />
+                    <a
+                      href={`mailto:${content.headquartersEmail}`}
+                      className="text-sm text-gray-600 transition-colors hover:text-orange-500"
+                    >
+                      {content.headquartersEmail}
                     </a>
                   </div>
                   <div className="flex gap-3">
-                    <Clock size={16} className="text-orange-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-600 text-sm">Thứ 2 – Thứ 7: 7:30 – 17:30</p>
+                    <Clock size={16} className="mt-0.5 flex-shrink-0 text-orange-400" />
+                    <p className="text-sm text-gray-600">{content.headquartersHours}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Other branches */}
-              {branches.slice(1).map((branch) => (
-                <div key={branch.name} className="p-5 rounded-sm bg-gray-50 border border-gray-100">
-                  <h4 className="font-heading font-semibold text-gray-900 text-sm mb-3">{branch.name}</h4>
-                  <div className="flex gap-2 mb-1.5">
-                    <MapPin size={13} className="text-gray-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-500 text-xs">{branch.address}</p>
+              {otherBranches.map((branch) => (
+                <div key={`${branch.name}-${branch.address}`} className="rounded-sm border border-gray-100 bg-gray-50 p-5">
+                  <h4 className="mb-3 font-heading text-sm font-semibold text-gray-900">{branch.name}</h4>
+                  <div className="mb-1.5 flex gap-2">
+                    <MapPin size={13} className="mt-0.5 flex-shrink-0 text-gray-400" />
+                    <p className="text-xs text-gray-500">{branch.address}</p>
+                  </div>
+                  <div className="mb-1.5 flex gap-2">
+                    <Phone size={13} className="mt-0.5 flex-shrink-0 text-gray-400" />
+                    <p className="text-xs text-gray-500">{branch.phone}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Clock size={13} className="text-gray-400 flex-shrink-0 mt-0.5" />
-                    <p className="text-gray-500 text-xs">{branch.hours}</p>
+                    <Clock size={13} className="mt-0.5 flex-shrink-0 text-gray-400" />
+                    <p className="text-xs text-gray-500">{branch.hours}</p>
                   </div>
                 </div>
               ))}
 
-              {/* Special contacts */}
-              <div className="p-5 rounded-sm border border-gray-100 bg-white">
-                <h4 className="font-heading font-semibold text-gray-900 text-sm mb-3">Đặt phòng Phương Anh</h4>
-                <a href="tel:0839881881" className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
-                  <Phone size={14} />
-                  0839.881.881
-                </a>
-                <p className="text-gray-400 text-xs mt-1">345 Thống Nhất, Tích Lương, Thái Nguyên</p>
-              </div>
-
-              <div className="p-5 rounded-sm border border-gray-100 bg-white">
-                <h4 className="font-heading font-semibold text-gray-900 text-sm mb-3">Wonderland Nha Trang</h4>
-                <a href="tel:02583551999" className="flex items-center gap-2 text-orange-500 font-semibold text-sm hover:text-orange-600 transition-colors">
-                  <Phone size={14} />
-                  0258.3551.999
-                </a>
-                <p className="text-gray-400 text-xs mt-1">Lô 10-11 Phạm Văn Đồng, Nha Trang</p>
-              </div>
+              {content.specialContacts.map((contact) => (
+                <div key={`${contact.title}-${contact.phone}`} className="rounded-sm border border-gray-100 bg-white p-5">
+                  <h4 className="mb-3 font-heading text-sm font-semibold text-gray-900">{contact.title}</h4>
+                  <a
+                    href={`tel:${toTelHref(contact.phone)}`}
+                    className="flex items-center gap-2 text-sm font-semibold text-orange-500 transition-colors hover:text-orange-600"
+                  >
+                    <Phone size={14} />
+                    {contact.phone}
+                  </a>
+                  <p className="mt-1 text-xs text-gray-400">{contact.subtitle}</p>
+                </div>
+              ))}
             </div>
           </ScrollReveal>
         </div>
 
-        {/* Google Maps */}
         <ScrollReveal>
-          <SectionHeading title="VỊ TRÍ TRÊN BẢN ĐỒ" subtitle="Trụ sở chính tại TP. Thái Nguyên" />
-          <div className="rounded-sm overflow-hidden shadow-md border border-gray-100" style={{ height: "400px" }}>
+          <SectionHeading title={content.mapTitle} subtitle={content.mapSubtitle} />
+          <div className="overflow-hidden rounded-sm border border-gray-100 shadow-md" style={{ height: '400px' }}>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3717.2826804744565!2d105.83754107462296!3d21.593031980293644!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135197196d76a2b%3A0xbe4f58c5e0f7b22c!2sCam%20Gi%C3%A1%2C%20Th%C3%A0nh%20ph%E1%BB%91%20Th%C3%A1i%20Nguy%C3%AAn%2C%20Th%C3%A1i%20Nguy%C3%AAn!5e0!3m2!1svi!2svn!4v1700000000000!5m2!1svi!2svn"
+              src={content.mapEmbed}
               width="100%"
               height="400"
               style={{ border: 0 }}
@@ -189,19 +195,25 @@ export default function LienHePage() {
           </div>
         </ScrollReveal>
 
-        {/* Branch cards */}
         <ScrollReveal delay={0.1}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-10">
-            {branches.map((branch) => (
-              <div key={branch.name} className={`p-5 rounded-sm transition-colors ${branch.main ? "border-2 border-orange-300 text-white" : "bg-gray-50 border border-gray-100"}`}
-                style={branch.main ? { backgroundColor: "var(--navy)" } : {}}>
-                <div className={`w-2 h-2 rounded-sm mb-3 ${branch.main ? "bg-orange-400" : "bg-teal-400"}`} />
-                <h4 className={`font-heading font-bold text-sm mb-2 ${branch.main ? "text-white" : "text-gray-900"}`}>{branch.name}</h4>
-                <p className={`text-xs mb-1.5 flex items-start gap-1.5 ${branch.main ? "text-blue-200" : "text-gray-500"}`}>
-                  <MapPin size={12} className="flex-shrink-0 mt-0.5" />
+          <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {content.branches.map((branch) => (
+              <div
+                key={`${branch.name}-${branch.address}`}
+                className={`rounded-sm p-5 transition-colors ${
+                  branch.main ? 'border-2 border-orange-300 text-white' : 'border border-gray-100 bg-gray-50'
+                }`}
+                style={branch.main ? { backgroundColor: 'var(--navy)' } : {}}
+              >
+                <div className={`mb-3 h-2 w-2 rounded-sm ${branch.main ? 'bg-orange-400' : 'bg-teal-400'}`} />
+                <h4 className={`mb-2 font-heading text-sm font-bold ${branch.main ? 'text-white' : 'text-gray-900'}`}>
+                  {branch.name}
+                </h4>
+                <p className={`mb-1.5 flex items-start gap-1.5 text-xs ${branch.main ? 'text-blue-200' : 'text-gray-500'}`}>
+                  <MapPin size={12} className="mt-0.5 flex-shrink-0" />
                   {branch.address}
                 </p>
-                <p className={`text-xs flex items-center gap-1.5 ${branch.main ? "text-blue-200" : "text-gray-500"}`}>
+                <p className={`flex items-center gap-1.5 text-xs ${branch.main ? 'text-blue-200' : 'text-gray-500'}`}>
                   <Clock size={12} />
                   {branch.hours}
                 </p>
@@ -211,5 +223,5 @@ export default function LienHePage() {
         </ScrollReveal>
       </div>
     </div>
-  );
+  )
 }
