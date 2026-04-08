@@ -105,7 +105,7 @@ export default async function RootLayout({
           // Public pages: full layout with Header/Footer
           <>
             <Header />
-            <main className="pt-[60px]">{children}</main>
+            <main className="pt-[72px] lg:pt-[76px]">{children}</main>
             <Footer />
             <FloatingButtons />
           </>

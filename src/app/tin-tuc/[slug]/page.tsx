@@ -69,7 +69,7 @@ export default async function TinTucDetailPage({
     <div>
       {/* Banner */}
       <div className="relative" style={{ backgroundColor: "var(--navy)" }}>
-        <div className="container-wide py-12">
+        <div className="container-wide py-4 md:py-12">
           <Breadcrumb
             items={[
               { label: "Tin tức", href: "/tin-tuc" },
