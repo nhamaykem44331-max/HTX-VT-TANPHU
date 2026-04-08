@@ -5,7 +5,8 @@ import { createServerSupabase } from '@/lib/supabase'
 
 export const metadata = { title: 'Sửa bài viết — Admin HTX Tân Phú' }
 
-export default async function EditNewsPage({ params }: { params: { id: string } }) {
+export default async function EditNewsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   let initialData = null
 
   try {
@@ -13,7 +14,7 @@ export default async function EditNewsPage({ params }: { params: { id: string } 
     const { data, error } = await supabase
       .from('news')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error || !data) throw new Error('Not found')
@@ -21,7 +22,7 @@ export default async function EditNewsPage({ params }: { params: { id: string } 
   } catch (err) {
     // Check fallback static data if Supabase isn't found
     const { newsArticles } = await import('@/data/news')
-    const found = newsArticles.find(n => n.id === params.id)
+    const found = newsArticles.find(n => n.id === id)
     if (found) {
       initialData = { ...found, published: true } // Static data assumes published
     } else {

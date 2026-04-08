@@ -5,7 +5,8 @@ import { createServerSupabase } from '@/lib/supabase'
 
 export const metadata = { title: 'Sửa vị trí — Admin HTX Tân Phú' }
 
-export default async function EditJobPage({ params }: { params: { id: string } }) {
+export default async function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   let initialData = null
 
   try {
@@ -13,14 +14,14 @@ export default async function EditJobPage({ params }: { params: { id: string } }
     const { data, error } = await supabase
       .from('jobs')
       .select('*')
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error || !data) throw new Error('Not found')
     initialData = data
   } catch (err) {
     const { jobs } = await import('@/data/jobs')
-    const found = jobs.find(j => j.id === params.id)
+    const found = jobs.find(j => j.id === id)
     if (found) {
       initialData = { ...found, published: true, field_id: found.fieldId }
     } else {

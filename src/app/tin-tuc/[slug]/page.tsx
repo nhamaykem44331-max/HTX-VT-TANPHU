@@ -9,28 +9,31 @@ import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import { formatDate } from "@/lib/utils";
 
+interface NewsDetailPageProps {
+  params: Promise<{ slug: string }>;
+}
+
 export async function generateStaticParams() {
   return newsArticles.map((article) => ({ slug: article.slug }));
 }
 
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
-  const article = await getNewsBySlug(params.slug);
+}: NewsDetailPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getNewsBySlug(slug);
   if (!article) return {};
   return {
     title: `${article.title} — HTX Tân Phú`,
     description: article.excerpt,
     alternates: {
-      canonical: `https://htxtanphu.com/tin-tuc/${params.slug}`,
+      canonical: `https://htxtanphu.com/tin-tuc/${slug}`,
     },
     openGraph: {
       title: article.title,
       description: article.excerpt,
       type: "article",
-      url: `https://htxtanphu.com/tin-tuc/${params.slug}`,
+      url: `https://htxtanphu.com/tin-tuc/${slug}`,
       publishedTime: article.date,
       images: [
         {
@@ -52,10 +55,9 @@ export async function generateMetadata({
 
 export default async function TinTucDetailPage({
   params,
-}: {
-  params: { slug: string };
-}) {
-  const article = await getNewsBySlug(params.slug);
+}: NewsDetailPageProps) {
+  const { slug } = await params;
+  const article = await getNewsBySlug(slug);
   if (!article) notFound();
 
   const allNews = await getNews(4);

@@ -4,12 +4,13 @@ import { getFields } from "@/lib/data-service";
 import FieldDetail from "@/components/shared/FieldDetail";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
   const fields = await getFields();
-  const field = fields.find((f: any) => f.slug === params.slug);
+  const field = fields.find((f: any) => f.slug === slug);
   
   if (!field) return {};
   
@@ -28,8 +29,9 @@ export async function generateStaticParams() {
 }
 
 export default async function Page({ params }: Props) {
+  const { slug } = await params;
   const fields = await getFields();
-  const field = fields.find((f: any) => f.slug === params.slug);
+  const field = fields.find((f: any) => f.slug === slug);
   
   if (!field) notFound();
   
