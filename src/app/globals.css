@@ -118,3 +118,109 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--orange);
   color: white;
 }
+
+.rich-text-editor__content {
+  min-height: 360px;
+  padding: 1rem;
+  color: var(--gray-700);
+  font-size: 0.95rem;
+  line-height: 1.8;
+  outline: none;
+  white-space: normal;
+}
+
+.rich-text-editor__content:empty::before {
+  content: attr(data-placeholder);
+  color: var(--gray-400);
+}
+
+.rich-text-editor__content p,
+.rich-text-editor__content h2,
+.rich-text-editor__content h3,
+.rich-text-editor__content h4,
+.rich-text-editor__content ul,
+.rich-text-editor__content ol,
+.rich-text-editor__content blockquote {
+  margin-bottom: 1rem;
+}
+
+.rich-text-editor__content ul,
+.rich-text-editor__content ol,
+.rich-text-output ul,
+.rich-text-output ol {
+  padding-left: 1.5rem;
+}
+
+.rich-text-editor__content blockquote,
+.rich-text-output blockquote {
+  border-left: 4px solid var(--orange);
+  padding-left: 1rem;
+  color: var(--gray-600);
+  font-style: italic;
+}
+
+.rich-text-output {
+  color: var(--gray-700);
+}
+
+.rich-text-output > *:first-child {
+  margin-top: 0;
+}
+
+.rich-text-output > *:last-child {
+  margin-bottom: 0;
+}
+
+.rich-text-output p,
+.rich-text-output ul,
+.rich-text-output ol,
+.rich-text-output blockquote {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.rich-text-output h2,
+.rich-text-output h3,
+.rich-text-output h4 {
+  margin: 2rem 0 1rem;
+  color: var(--gray-900);
+  font-family: var(--font-montserrat);
+  line-height: 1.35;
+}
+
+.rich-text-output h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+
+.rich-text-output h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.rich-text-output h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.rich-text-output li + li {
+  margin-top: 0.5rem;
+}
+
+.rich-text-output strong,
+.rich-text-output b {
+  color: var(--gray-900);
+  font-weight: 700;
+}
+
+.rich-text-output em,
+.rich-text-output i {
+  font-style: italic;
+}
+
+.rich-text-output a {
+  color: var(--orange-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}

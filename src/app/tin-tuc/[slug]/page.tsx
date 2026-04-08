@@ -7,6 +7,7 @@ import { getNewsBySlug, getNews } from "@/lib/data-service";
 import Breadcrumb from "@/components/shared/Breadcrumb";
 import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import ScrollReveal from "@/components/shared/ScrollReveal";
+import { normalizeRichTextContent } from "@/lib/rich-text";
 import { formatDate } from "@/lib/utils";
 
 interface NewsDetailPageProps {
@@ -62,6 +63,7 @@ export default async function TinTucDetailPage({
 
   const allNews = await getNews(4);
   const related = allNews.filter((a) => a.id !== article.id).slice(0, 3);
+  const articleContentHtml = normalizeRichTextContent(article.content);
 
   return (
     <div>
@@ -138,13 +140,10 @@ export default async function TinTucDetailPage({
             </p>
 
             {/* Content */}
-            <div className="prose prose-gray max-w-none">
-              {article.content.split("\n\n").map((para, i) => (
-                <p key={i} className="text-gray-700 leading-relaxed mb-4 text-[15px]">
-                  {para}
-                </p>
-              ))}
-            </div>
+            <div
+              className="rich-text-output"
+              dangerouslySetInnerHTML={{ __html: articleContentHtml }}
+            />
 
             {/* Tags */}
             <div className="mt-8 pt-6 border-t border-gray-100 flex items-center gap-2 flex-wrap">
