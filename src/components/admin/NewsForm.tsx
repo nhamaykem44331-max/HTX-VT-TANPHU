@@ -24,9 +24,11 @@ const newsSchema = z.object({
 })
 
 type NewsFormData = z.infer<typeof newsSchema>
+type NewsFormInputData = Partial<NewsFormData> & { id?: string; read_time?: number | null }
+type NewsFormDataSupabase = Omit<NewsFormData, 'readTime'> & { read_time: number }
 
 interface NewsFormProps {
-  initialData?: NewsFormData & { id?: string }
+  initialData?: NewsFormInputData
   mode: 'create' | 'edit'
 }
 
@@ -47,6 +49,19 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
   const [loading, setLoading] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [slugModified, setSlugModified] = useState(mode === 'edit')
+  const defaultValues: NewsFormData = {
+    category: initialData?.category ?? 'Tin tức',
+    date: initialData?.date ?? new Date().toISOString().split('T')[0],
+    author: initialData?.author ?? 'Ban Biên tập',
+    readTime: initialData?.readTime ?? initialData?.read_time ?? 3,
+    featured: initialData?.featured ?? false,
+    published: initialData?.published ?? true,
+    image: initialData?.image ?? '',
+    title: initialData?.title ?? '',
+    slug: initialData?.slug ?? '',
+    excerpt: initialData?.excerpt ?? '',
+    content: initialData?.content ?? '',
+  }
 
   const {
     register,
@@ -56,19 +71,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
     formState: { errors },
   } = useForm<NewsFormData>({
     resolver: zodResolver(newsSchema),
-    defaultValues: initialData || {
-      category: 'Tin tức',
-      date: new Date().toISOString().split('T')[0],
-      author: 'Ban Biên tập',
-      readTime: 3,
-      featured: false,
-      published: true,
-      image: '',
-      title: '',
-      slug: '',
-      excerpt: '',
-      content: '',
-    },
+    defaultValues,
   })
 
   // Auto-generate slug when title changes unless user has manually modified slug
@@ -83,11 +86,26 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
     setLoading(true)
     setErrorMsg('')
     try {
+      // Supabase schema uses snake_case column names while the form uses camelCase.
+      const dbPayload: NewsFormDataSupabase = {
+        title: data.title,
+        slug: data.slug,
+        category: data.category,
+        excerpt: data.excerpt,
+        content: data.content,
+        image: data.image,
+        author: data.author,
+        date: data.date,
+        read_time: data.readTime,
+        featured: data.featured,
+        published: data.published,
+      }
+
       if (mode === 'create') {
-        const { error } = await supabase.from('news').insert(data)
+        const { error } = await supabase.from('news').insert(dbPayload)
         if (error) throw error
       } else if (mode === 'edit' && initialData?.id) {
-        const { error } = await supabase.from('news').update(data).eq('id', initialData.id)
+        const { error } = await supabase.from('news').update(dbPayload).eq('id', initialData.id)
         if (error) throw error
       }
       router.push('/admin/tin-tuc')
