@@ -1,172 +1,218 @@
 import Link from 'next/link'
-import { Newspaper, Briefcase, Handshake, Award, MessageSquare, ArrowRight } from 'lucide-react'
-import StatsCard from '@/components/admin/StatsCard'
 import {
-  getNewsCountFromDB,
-  getJobsCountFromDB,
-  getPartnersCountFromDB,
-  getAwardsCountFromDB,
-  getNewContactsCountFromDB,
-  getRecentContactsFromDB,
-  getNewsFromDB,
-} from '@/lib/queries'
+  ArrowRight,
+  Briefcase,
+  ExternalLink,
+  Factory,
+  Home,
+  Image as ImageIcon,
+  Inbox,
+  Newspaper,
+  PenLine,
+  Phone,
+  Truck,
+  Upload,
+  UserRound,
+} from 'lucide-react'
+import { getNewContactsCountFromDB, getRecentContactsFromDB } from '@/lib/queries'
 
-export const metadata = { title: 'Dashboard — HTX Tân Phú Admin' }
+export const metadata = { title: 'Tổng quan — HTX Tân Phú Admin' }
 
-// Trạng thái badge tiếng Việt
-const statusLabel: Record<string, { label: string; color: string }> = {
-  new:      { label: 'Mới',         color: '#EF4444' },
-  read:     { label: 'Đã đọc',      color: '#6B7280' },
-  replied:  { label: 'Đã trả lời',  color: '#22C55E' },
-  archived: { label: 'Lưu trữ',     color: '#9CA3AF' },
-}
+/** Việc quản trị viên làm thường xuyên nhất — đặt ngay đầu trang để bấm một lần là vào việc. */
+const quickActions = [
+  {
+    href: '/admin/tin-tuc/them',
+    label: 'Viết bài mới',
+    hint: 'Đăng tin hoạt động của HTX',
+    icon: PenLine,
+  },
+  {
+    href: '/admin/media',
+    label: 'Tải ảnh lên',
+    hint: 'Thêm ảnh vào thư viện dùng chung',
+    icon: Upload,
+  },
+  {
+    href: '/admin/hop-thu',
+    label: 'Xem form liên hệ',
+    hint: 'Khách gửi yêu cầu tư vấn',
+    icon: Inbox,
+  },
+  {
+    href: '/admin/tuyen-dung',
+    label: 'Đăng tin tuyển dụng',
+    hint: 'Thêm vị trí đang cần người',
+    icon: Briefcase,
+  },
+]
 
-function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('vi-VN', {
-    day: '2-digit', month: '2-digit', year: 'numeric',
+/** Sơ đồ website: mỗi dòng là một trang khách nhìn thấy, kèm lối vào chỗ sửa. */
+const sitePages = [
+  { admin: '/admin/trang-chu', site: '/', label: 'Trang chủ', desc: 'Slider, con số, thứ tự các khối', icon: Home },
+  { admin: '/admin/gioi-thieu', site: '/gioi-thieu', label: 'Giới thiệu', desc: 'Lịch sử, ban lãnh đạo, giải thưởng', icon: UserRound },
+  { admin: '/admin/linh-vuc', site: '/linh-vuc', label: 'Lĩnh vực', desc: 'Danh sách lĩnh vực hoạt động', icon: Factory },
+  { admin: '/admin/nang-luc', site: '/nang-luc', label: 'Năng lực', desc: 'Thiết bị, chỉ số, chứng nhận', icon: Truck },
+  { admin: '/admin/tin-tuc', site: '/tin-tuc', label: 'Tin tức', desc: 'Bài viết và danh mục tin', icon: Newspaper },
+  { admin: '/admin/tuyen-dung', site: '/tuyen-dung', label: 'Tuyển dụng', desc: 'Vị trí đang tuyển, phúc lợi', icon: Briefcase },
+  { admin: '/admin/lien-he', site: '/lien-he', label: 'Liên hệ', desc: 'Thông tin, chi nhánh, bản đồ', icon: Phone },
+]
+
+function formatDate(value: string) {
+  return new Date(value).toLocaleDateString('vi-VN', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   })
 }
 
 export default async function DashboardPage() {
-  // Fetch counts in parallel — @react-best-practices: async-parallel
-  const [newsCount, jobsCount, partnersCount, awardsCount, newContactsCount, recentContacts, recentNews] =
-    await Promise.all([
-      getNewsCountFromDB(),
-      getJobsCountFromDB(),
-      getPartnersCountFromDB(),
-      getAwardsCountFromDB(),
-      getNewContactsCountFromDB(),
-      getRecentContactsFromDB(5),
-      getNewsFromDB(5),
-    ])
+  const [newContactsCount, recentContacts] = await Promise.all([
+    getNewContactsCountFromDB(),
+    getRecentContactsFromDB(5),
+  ])
 
   return (
-    <div className="space-y-8">
-      {/* Page heading */}
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="text-gray-500 text-sm mt-1">Tổng quan hệ thống</p>
+        <h1 className="font-heading text-2xl font-bold text-gray-900">Tổng quan</h1>
+        <p className="mt-1 text-sm text-gray-500">
+          Chọn một việc bên dưới, hoặc mở trang cần sửa trong sơ đồ website.
+        </p>
       </div>
 
-      {/* Stats grid: 2 → 3 → 5 cols */}
-      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
-        <StatsCard
-          title="Tin tức"
-          value={newsCount}
-          icon={Newspaper}
-          href="/admin/tin-tuc"
-          color="blue"
-        />
-        <StatsCard
-          title="Tuyển dụng"
-          value={jobsCount}
-          icon={Briefcase}
-          href="/admin/tuyen-dung"
-          color="green"
-        />
-        <StatsCard
-          title="Đối tác"
-          value={partnersCount}
-          icon={Handshake}
-          href="/admin/doi-tac"
-          color="purple"
-        />
-        <StatsCard
-          title="Giải thưởng"
-          value={awardsCount}
-          icon={Award}
-          href="/admin/giai-thuong"
-          color="amber"
-        />
-        <StatsCard
-          title="Form mới"
-          value={newContactsCount}
-          icon={MessageSquare}
-          href="/admin/lien-he"
-          color="red"
-        />
-      </div>
-
-      {/* Two-column lower section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        {/* Recent contact submissions */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="font-bold text-gray-900">Form liên hệ mới nhất</h2>
+      {/* Việc hay làm */}
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {quickActions.map((action) => {
+          const isInbox = action.href === '/admin/hop-thu'
+          return (
             <Link
-              href="/admin/lien-he"
-              className="text-xs font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1"
+              key={action.href}
+              href={action.href}
+              className="group relative flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition-all hover:border-orange-300 hover:shadow-md"
             >
-              Xem tất cả <ArrowRight size={12} />
+              <div className="flex items-center justify-between">
+                <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-orange-50 text-orange-500 transition-colors group-hover:bg-orange-500 group-hover:text-white">
+                  <action.icon size={20} />
+                </div>
+                {isInbox && newContactsCount > 0 ? (
+                  <span className="rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                    {newContactsCount} mới
+                  </span>
+                ) : null}
+              </div>
+              <div>
+                <p className="font-heading font-bold text-gray-900">{action.label}</p>
+                <p className="mt-0.5 text-xs leading-relaxed text-gray-500">{action.hint}</p>
+              </div>
+            </Link>
+          )
+        })}
+      </div>
+
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        {/* Sơ đồ website */}
+        <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="border-b border-gray-100 px-5 py-4">
+            <h2 className="font-heading font-bold text-gray-900">Sơ đồ website</h2>
+            <p className="mt-0.5 text-sm text-gray-500">
+              Mỗi dòng là một trang trên website. Bấm “Sửa” để chỉnh nội dung trang đó.
+            </p>
+          </div>
+
+          <ul className="divide-y divide-gray-100">
+            {sitePages.map((page) => (
+              <li
+                key={page.admin}
+                className="flex flex-col gap-3 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                    <page.icon size={17} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-gray-900">{page.label}</p>
+                    <p className="truncate text-xs text-gray-500">{page.desc}</p>
+                  </div>
+                </div>
+
+                <div className="flex shrink-0 items-center gap-2">
+                  <a
+                    href={page.site}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50"
+                  >
+                    <ExternalLink size={13} />
+                    Xem
+                  </a>
+                  <Link
+                    href={page.admin}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-orange-500 px-3.5 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-orange-600"
+                  >
+                    Sửa
+                    <ArrowRight size={13} />
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+
+          <div className="flex items-center gap-2 border-t border-gray-100 px-5 py-3">
+            <ImageIcon size={15} className="text-gray-400" />
+            <p className="text-xs text-gray-500">
+              Ảnh dùng chung cho mọi trang nằm ở{' '}
+              <Link href="/admin/media" className="font-semibold text-orange-600 hover:underline">
+                Thư viện ảnh
+              </Link>
+              .
+            </p>
+          </div>
+        </section>
+
+        {/* Form liên hệ mới nhất */}
+        <section className="rounded-xl border border-gray-200 bg-white shadow-sm">
+          <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+            <div>
+              <h2 className="font-heading font-bold text-gray-900">Form liên hệ mới</h2>
+              <p className="mt-0.5 text-sm text-gray-500">
+                {newContactsCount > 0
+                  ? `${newContactsCount} yêu cầu chưa xử lý`
+                  : 'Không có yêu cầu mới'}
+              </p>
+            </div>
+            <Link
+              href="/admin/hop-thu"
+              className="text-sm font-semibold text-orange-600 hover:underline"
+            >
+              Tất cả
             </Link>
           </div>
 
           {recentContacts.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-400 text-sm">
-              Chưa có form nào
-            </div>
+            <p className="px-5 py-8 text-center text-sm text-gray-400">Chưa có form liên hệ nào.</p>
           ) : (
-            <div className="divide-y divide-gray-50">
-              {recentContacts.map((c) => {
-                const st = statusLabel[c.status] ?? statusLabel['read']
-                return (
-                  <div key={c.id} className="px-6 py-3 flex items-center gap-4 hover:bg-gray-50 transition-colors">
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-900 truncate">{c.name}</p>
-                      <p className="text-xs text-gray-400 truncate">{c.service}</p>
+            <ul className="divide-y divide-gray-100">
+              {recentContacts.map((contact) => (
+                <li key={contact.id} className="px-5 py-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold text-gray-900">{contact.name}</p>
+                      <p className="truncate text-xs text-gray-500">{contact.service}</p>
                     </div>
-                    <p className="text-xs text-gray-400 flex-shrink-0 hidden sm:block">
-                      {formatDate(c.createdAt)}
-                    </p>
-                    <span
-                      className="text-xs font-semibold px-2 py-1 rounded-md flex-shrink-0"
-                      style={{ color: st.color, backgroundColor: st.color + '18' }}
-                    >
-                      {st.label}
-                    </span>
+                    <div className="shrink-0 text-right">
+                      {contact.status === 'new' ? (
+                        <span className="rounded-full bg-red-50 px-2 py-0.5 text-[11px] font-bold text-red-600">
+                          Mới
+                        </span>
+                      ) : null}
+                      <p className="mt-1 text-[11px] text-gray-400">{formatDate(contact.createdAt)}</p>
+                    </div>
                   </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
-
-        {/* Recent news */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="font-bold text-gray-900">Tin tức gần đây</h2>
-            <Link
-              href="/admin/tin-tuc"
-              className="text-xs font-semibold text-orange-500 hover:text-orange-600 flex items-center gap-1"
-            >
-              Xem tất cả <ArrowRight size={12} />
-            </Link>
-          </div>
-
-          {recentNews.length === 0 ? (
-            <div className="px-6 py-12 text-center text-gray-400 text-sm">
-              Chưa có tin tức nào
-            </div>
-          ) : (
-            <div className="divide-y divide-gray-50">
-              {recentNews.map((n) => (
-                <div key={n.id} className="px-6 py-3 flex items-center gap-4 hover:bg-gray-50 transition-colors">
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-gray-900 truncate line-clamp-1">{n.title}</p>
-                    <p className="text-xs text-gray-400">{formatDate(n.date)}</p>
-                  </div>
-                  <span
-                    className="text-xs font-semibold px-2 py-1 rounded-md flex-shrink-0"
-                    style={{ color: '#2C3576', backgroundColor: '#2C357618' }}
-                  >
-                    {n.category}
-                  </span>
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
           )}
-        </div>
+        </section>
       </div>
     </div>
   )

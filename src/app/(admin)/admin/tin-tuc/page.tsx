@@ -1,25 +1,20 @@
-import { createServerSupabase } from '@/lib/supabase'
-import NewsTable from './NewsTable'
+import { getJobs, getNews } from '@/lib/data-service'
+import { getPageEditorContent } from '@/lib/page-content'
+import PageContentEditor from '@/components/admin/PageContentEditor'
 
-export const metadata = { title: 'Quản lý Tin tức — Admin HTX Tân Phú' }
+export default async function AdminPage() {
+  const [content, news, jobs] = await Promise.all([
+    getPageEditorContent(),
+    getNews(),
+    getJobs(),
+  ])
 
-export default async function NewsAdminPage() {
-  let data = []
-  
-  try {
-    const supabase = createServerSupabase()
-    const { data: dbData, error } = await supabase
-      .from('news')
-      .select('*')
-      .order('date', { ascending: false })
-      
-    if (error) throw error
-    data = dbData || []
-  } catch (err) {
-    // Fallback to static data if Supabase isn't configured
-    const { newsArticles } = await import('@/data/news')
-    data = newsArticles
-  }
-
-  return <NewsTable initialData={data} />
+  return (
+    <PageContentEditor
+      page="tin-tuc"
+      initialContent={content}
+      initialNews={news}
+      initialJobs={jobs}
+    />
+  )
 }

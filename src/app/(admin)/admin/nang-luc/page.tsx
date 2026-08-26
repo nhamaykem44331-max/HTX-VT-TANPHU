@@ -11,7 +11,7 @@ export default async function AdminPage() {
 
   return (
     <PageContentEditor
-      page="linh-vuc"
+      page="nang-luc"
       initialContent={content}
       initialNews={news}
       initialJobs={jobs}
