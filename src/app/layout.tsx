@@ -5,9 +5,17 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FloatingButtons from "@/components/layout/FloatingButtons";
 import { COMPANY_INFO } from "@/lib/constants";
+import { OG_IMAGE, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://htxtanphu.com"),
+  metadataBase: new URL(SITE_URL),
+  // Google lấy favicon để hiện cạnh kết quả tìm kiếm. Trước đây site không khai
+  // báo icon nào nên Google hiện hình quả cầu mặc định thay vì logo HTX.
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/icon.png",
+    apple: "/apple-icon.png",
+  },
   title: {
     default: "HTX Vận tải Ô tô Tân Phú — Đa ngành, Chuyên nghiệp, Uy tín",
     template: "%s | HTX Tân Phú",
@@ -27,26 +35,19 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://htxtanphu.com",
+    url: SITE_URL,
     siteName: COMPANY_INFO.name,
     title: "HTX Vận tải Ô tô Tân Phú — 30 năm hòa hợp cùng phát triển",
     description:
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên với 7 lĩnh vực kinh doanh, doanh thu ~3.000 tỷ/năm.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "HTX Vận tải Ô tô Tân Phú",
-      },
-    ],
+    images: [OG_IMAGE],
   },
   robots: {
     index: true,
     follow: true,
   },
   alternates: {
-    canonical: "https://htxtanphu.com",
+    canonical: SITE_URL,
   },
 };
 
@@ -54,8 +55,8 @@ const localBusinessSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: COMPANY_INFO.name,
-  url: "https://htxtanphu.com",
-  logo: "https://htxtanphu.com/images/logo.svg",
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo-512.png`,
   description:
     "HTX Vận tải Ô tô Tân Phú — 30 năm uy tín, 7 lĩnh vực kinh doanh tại Thái Nguyên",
   foundingDate: "1995",

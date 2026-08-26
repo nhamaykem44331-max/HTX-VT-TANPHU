@@ -5,20 +5,21 @@ import ContactForm from '@/components/shared/ContactForm'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import SectionHeading from '@/components/shared/SectionHeading'
 import { getPageEditorContent } from '@/lib/page-content'
+import { OG_IMAGE, absoluteUrl } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: 'Liên hệ HTX Tân Phú — Hotline 0208.383.2608',
   description:
     'Liên hệ HTX Vận tải Ô tô Tân Phú: trụ sở Thái Nguyên, chi nhánh và hotline tư vấn dịch vụ vận tải, cẩu lắp, khách sạn.',
   keywords: ['liên hệ HTX Tân Phú', 'hotline vận tải Thái Nguyên', 'tư vấn vận tải hàng hóa'],
-  alternates: { canonical: 'https://htxtanphu.com/lien-he' },
+  alternates: { canonical: absoluteUrl('/lien-he') },
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
-    url: 'https://htxtanphu.com/lien-he',
+    url: absoluteUrl('/lien-he'),
     title: 'Liên hệ HTX Tân Phú — Hotline 0208.383.2608',
     description: 'Liên hệ HTX Vận tải Ô tô Tân Phú tại Thái Nguyên và các đầu mối tư vấn dịch vụ.',
-    images: [{ url: 'https://htxtanphu.com/og-image.png', width: 945, height: 945 }],
+    images: [OG_IMAGE],
   },
 }
 

@@ -6,6 +6,7 @@ import ScrollReveal from '@/components/shared/ScrollReveal'
 import SectionHeading from '@/components/shared/SectionHeading'
 import { getAwards } from '@/lib/data-service'
 import { getPageEditorContent } from '@/lib/page-content'
+import { OG_IMAGE, absoluteUrl } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: 'Giới thiệu — HTX Vận tải Ô tô Tân Phú Thái Nguyên',
@@ -17,14 +18,14 @@ export const metadata: Metadata = {
     'ban lãnh đạo HTX',
     '30 năm phát triển',
   ],
-  alternates: { canonical: 'https://htxtanphu.com/gioi-thieu' },
+  alternates: { canonical: absoluteUrl('/gioi-thieu') },
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
-    url: 'https://htxtanphu.com/gioi-thieu',
+    url: absoluteUrl('/gioi-thieu'),
     title: 'Giới thiệu HTX Tân Phú — 30 năm hòa hợp cùng phát triển',
     description: 'Tìm hiểu về HTX Tân Phú: lịch sử, sứ mệnh, ban lãnh đạo và thành tích 30 năm.',
-    images: [{ url: 'https://htxtanphu.com/og-image.png', width: 945, height: 945 }],
+    images: [OG_IMAGE],
   },
 }
 

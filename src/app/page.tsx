@@ -13,6 +13,7 @@ import NewsSection from "@/components/home/NewsSection";
 import AwardsSection from "@/components/home/AwardsSection";
 import PartnersSection from "@/components/home/PartnersSection";
 import CTASection from "@/components/home/CTASection";
+import { OG_IMAGE, SITE_URL } from "@/lib/seo";
 
 // @nextjs-best-practices §6 — Static metadata for fixed pages
 export const metadata: Metadata = {
@@ -33,31 +34,24 @@ export const metadata: Metadata = {
   ],
   // @seo-audit: canonical must be set to avoid duplicate content
   alternates: {
-    canonical: "https://htxtanphu.com",
+    canonical: SITE_URL,
   },
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://htxtanphu.com",
+    url: SITE_URL,
     siteName: "HTX Vận tải Ô tô Tân Phú",
     title: "HTX Vận tải Ô tô Tân Phú — 30 năm hòa hợp cùng phát triển",
     description:
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên: vận tải, cẩu lắp, thép, khách sạn, vé máy bay, nông nghiệp hữu cơ.",
-    images: [
-      {
-        url: "https://htxtanphu.com/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "HTX Vận tải Ô tô Tân Phú — Thái Nguyên",
-      },
-    ],
+    images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "HTX Vận tải Ô tô Tân Phú — 30 năm hòa hợp cùng phát triển",
     description:
       "Doanh nghiệp HTX đa ngành hàng đầu Thái Nguyên với 7 lĩnh vực kinh doanh.",
-    images: ["https://htxtanphu.com/og-image.png"],
+    images: [OG_IMAGE.url],
   },
   robots: {
     index: true,

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://htxtanphu.com/sitemap.xml
+Sitemap: https://www.htxtanphu.com/sitemap.xml

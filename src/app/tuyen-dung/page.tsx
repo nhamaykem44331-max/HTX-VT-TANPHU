@@ -5,6 +5,7 @@
 
 import type { Metadata } from "next";
 import TuyenDungClient from "./TuyenDungClient";
+import { OG_IMAGE, absoluteUrl } from '@/lib/seo';
 
 // @seo-audit: title 57 chars ✓, description 148 chars ✓
 export const metadata: Metadata = {
@@ -12,14 +13,14 @@ export const metadata: Metadata = {
   description:
     "Tuyển dụng tại HTX Vận tải Ô tô Tân Phú: lái xe tải, kỹ thuật viên cẩu, nhân viên kinh doanh, lễ tân khách sạn. Thu nhập 7–25 triệu, đãi ngộ tốt.",
   keywords: ["tuyển dụng Thái Nguyên", "việc làm HTX Tân Phú", "lái xe tải Thái Nguyên", "tuyển lễ tân khách sạn"],
-  alternates: { canonical: "https://htxtanphu.com/tuyen-dung" },
+  alternates: { canonical: absoluteUrl("/tuyen-dung") },
   openGraph: {
     type: "website",
     locale: "vi_VN",
-    url: "https://htxtanphu.com/tuyen-dung",
+    url: absoluteUrl("/tuyen-dung"),
     title: "Tuyển dụng — HTX Vận tải Ô tô Tân Phú",
     description: "Cơ hội việc làm tại HTX Tân Phú: vận tải, cẩu lắp, khách sạn, kinh doanh thép. Thu nhập cạnh tranh, môi trường chuyên nghiệp.",
-    images: [{ url: "https://htxtanphu.com/og-image.png", width: 945, height: 945 }],
+    images: [OG_IMAGE],
   },
 };
 

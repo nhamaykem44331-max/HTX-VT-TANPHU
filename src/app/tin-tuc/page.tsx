@@ -8,20 +8,21 @@ import SectionHeading from '@/components/shared/SectionHeading'
 import { getNews } from '@/lib/data-service'
 import { getPageEditorContent } from '@/lib/page-content'
 import { formatDate } from '@/lib/utils'
+import { OG_IMAGE, absoluteUrl } from '@/lib/seo'
 
 export const metadata: Metadata = {
   title: 'Tin tức & Sự kiện — HTX Vận tải Ô tô Tân Phú',
   description:
     'Cập nhật tin tức mới nhất về HTX Vận tải Ô tô Tân Phú Thái Nguyên: thành tích, sự kiện, đầu tư, công nghệ và hoạt động cộng đồng.',
   keywords: ['tin tức HTX Tân Phú', 'sự kiện HTX', 'thành tích hợp tác xã Thái Nguyên'],
-  alternates: { canonical: 'https://htxtanphu.com/tin-tuc' },
+  alternates: { canonical: absoluteUrl('/tin-tuc') },
   openGraph: {
     type: 'website',
     locale: 'vi_VN',
-    url: 'https://htxtanphu.com/tin-tuc',
+    url: absoluteUrl('/tin-tuc'),
     title: 'Tin tức & Sự kiện — HTX Tân Phú',
     description: 'Cập nhật tin tức mới nhất về hoạt động của HTX Vận tải Ô tô Tân Phú.',
-    images: [{ url: 'https://htxtanphu.com/og-image.png', width: 945, height: 945 }],
+    images: [OG_IMAGE],
   },
 }
 

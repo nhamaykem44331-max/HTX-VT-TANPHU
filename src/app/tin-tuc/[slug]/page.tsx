@@ -9,6 +9,7 @@ import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import ScrollReveal from "@/components/shared/ScrollReveal";
 import { normalizeRichTextContent } from "@/lib/rich-text";
 import { formatDate } from "@/lib/utils";
+import { OG_IMAGE, absoluteUrl } from "@/lib/seo";
 
 interface NewsDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -24,32 +25,34 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = await getNewsBySlug(slug);
   if (!article) return {};
+  // Ảnh mỗi bài một kích thước khác nhau, nên KHÔNG khai báo width/height cứng.
+  // Bản cũ khai cố định 945x945 cho mọi bài trong khi ảnh thật là ảnh ngang
+  // (vd 1280x842) — Zalo và Facebook dựng khung xem trước theo số khai báo,
+  // thấy không khớp thì bỏ ảnh và chỉ hiện chữ.
+  const image = article.image
+    ? { url: article.image, alt: article.title }
+    : OG_IMAGE;
+
   return {
     title: `${article.title} — HTX Tân Phú`,
     description: article.excerpt,
     alternates: {
-      canonical: `https://htxtanphu.com/tin-tuc/${slug}`,
+      canonical: absoluteUrl(`/tin-tuc/${slug}`),
     },
     openGraph: {
       title: article.title,
       description: article.excerpt,
       type: "article",
-      url: `https://htxtanphu.com/tin-tuc/${slug}`,
+      url: absoluteUrl(`/tin-tuc/${slug}`),
       publishedTime: article.date,
-      images: [
-        {
-          url: article.image || "https://htxtanphu.com/og-image.png",
-          width: 945,
-          height: 945,
-          alt: article.title,
-        },
-      ],
+      images: [image],
     },
     twitter: {
-      card: "summary",
+      // summary hiện ảnh thu nhỏ; bài viết cần ảnh lớn nên dùng summary_large_image
+      card: "summary_large_image",
       title: article.title,
       description: article.excerpt,
-      images: [article.image || "https://htxtanphu.com/og-image.png"],
+      images: [image.url],
     },
   };
 }

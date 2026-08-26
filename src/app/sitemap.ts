@@ -1,9 +1,10 @@
+import { SITE_URL } from "@/lib/seo";
 import { MetadataRoute } from "next";
 import { newsArticles } from "@/data/news";
 import { fields } from "@/data/fields";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://htxtanphu.com";
+  const baseUrl = SITE_URL;
 
   const staticRoutes = [
     { url: baseUrl, priority: 1.0 },
