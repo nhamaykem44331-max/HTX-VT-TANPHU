@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Plus, Pencil, Trash2, Check, X, GripVertical, CheckCircle2, XCircle } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import ImageUploader from '@/components/admin/ImageUploader'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
+import AdminTabs from '@/components/admin/AdminTabs'
 
 // --- Tabs ---
 type TabType = 'hero' | 'figures' | 'sections'
@@ -13,35 +15,21 @@ export default function HomepageManager() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-heading text-2xl font-bold text-gray-900">Quản lý Trang chủ</h1>
+      <AdminPageHeader
+        title="Trang chủ"
+        description="Slider ảnh lớn, con số biết nói và thứ tự các khối trên trang chủ."
+        viewUrl="/"
+      />
       
-      {/* Tabs */}
-      <div className="flex border-b border-gray-200">
-        <button
-          onClick={() => setActiveTab('hero')}
-          className={`px-6 py-3 font-semibold text-sm transition-colors border-b-2 ${
-            activeTab === 'hero' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Hero Banner
-        </button>
-        <button
-          onClick={() => setActiveTab('figures')}
-          className={`px-6 py-3 font-semibold text-sm transition-colors border-b-2 ${
-            activeTab === 'figures' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Con số
-        </button>
-        <button
-          onClick={() => setActiveTab('sections')}
-          className={`px-6 py-3 font-semibold text-sm transition-colors border-b-2 ${
-            activeTab === 'sections' ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Sections
-        </button>
-      </div>
+      <AdminTabs
+        tabs={[
+          { id: 'hero', label: 'Slider ảnh lớn', hint: 'Các ảnh chạy luân phiên ở đầu trang chủ.' },
+          { id: 'figures', label: 'Con số biết nói', hint: 'Dãy số liệu nổi bật của HTX.' },
+          { id: 'sections', label: 'Thứ tự các khối', hint: 'Bật/tắt và sắp xếp thứ tự các khối trên trang chủ.' },
+        ]}
+        activeId={activeTab}
+        onChange={(id) => setActiveTab(id as typeof activeTab)}
+      />
 
       {/* Tab Content */}
       <div className="pt-2">
@@ -116,9 +104,9 @@ function HeroTab() {
   return (
     <div className="space-y-4">
       {/* List */}
-      <div className="bg-white border text-sm border-gray-200 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border text-sm border-gray-200 rounded-xl overflow-x-auto shadow-sm">
         {loading ? <div className="p-8 text-center text-gray-500">Đang tải...</div> : (
-          <table className="w-full text-left border-collapse">
+          <table className="admin-table">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="px-4 py-3 font-semibold text-gray-600">Thứ tự</th>
@@ -167,7 +155,7 @@ function HeroTab() {
       </div>
 
       {!showForm && (
-        <button onClick={() => { setShowForm(true); setEditingId(null); setFormData({ title: '', subtitle: '', description: '', image: '', cta_text: 'Khám phá dịch vụ', cta_link: '/linh-vuc', enabled: true }) }} className="btn-primary flex items-center gap-2">
+        <button onClick={() => { setShowForm(true); setEditingId(null); setFormData({ title: '', subtitle: '', description: '', image: '', cta_text: 'Khám phá dịch vụ', cta_link: '/linh-vuc', enabled: true }) }} className="admin-btn-primary">
           <Plus size={16}/> Thêm slide mới
         </button>
       )}
@@ -180,24 +168,24 @@ function HeroTab() {
             <div className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Tiêu đề (Cho phép xuống dòng \n)</label>
-                <textarea required rows={2} value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+                <textarea required rows={2} value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="admin-input" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Tiêu đề phụ (Subtitle)</label>
-                <input required value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+                <input required value={formData.subtitle} onChange={e => setFormData({...formData, subtitle: e.target.value})} className="admin-input" />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 mb-1">Mô tả nhỏ</label>
-                <input value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+                <input value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="admin-input" />
               </div>
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="block text-xs font-semibold text-gray-600 mb-1">Nút CTA (Text)</label>
-                  <input value={formData.cta_text} onChange={e => setFormData({...formData, cta_text: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+                  <input value={formData.cta_text} onChange={e => setFormData({...formData, cta_text: e.target.value})} className="admin-input" />
                 </div>
                 <div className="flex-1">
                   <label className="block text-xs font-semibold text-gray-600 mb-1">Nút CTA (Link)</label>
-                  <input value={formData.cta_link} onChange={e => setFormData({...formData, cta_link: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+                  <input value={formData.cta_link} onChange={e => setFormData({...formData, cta_link: e.target.value})} className="admin-input" />
                 </div>
               </div>
               <label className="flex items-center gap-2 mt-2">
@@ -321,25 +309,25 @@ function FiguresTab() {
         <form onSubmit={handleAdd} className="flex gap-3 items-end flex-wrap">
           <div className="flex-1 min-w-[200px]">
             <label className="block text-xs font-semibold text-gray-600 mb-1">Nhãn (Label)</label>
-            <input required value={formData.label} onChange={e => setFormData({...formData, label: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+            <input required value={formData.label} onChange={e => setFormData({...formData, label: e.target.value})} className="admin-input" />
           </div>
           <div className="w-[100px]">
             <label className="block text-xs font-semibold text-gray-600 mb-1">Icon</label>
-            <select value={formData.icon} onChange={e => setFormData({...formData, icon: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 bg-white">
+            <select value={formData.icon} onChange={e => setFormData({...formData, icon: e.target.value})} className="admin-select">
               {icons.map(i => <option key={i} value={i}>{i}</option>)}
             </select>
           </div>
           <div className="w-[80px]">
             <label className="block text-xs font-semibold text-gray-600 mb-1">Prefix</label>
-            <input value={formData.prefix} onChange={e => setFormData({...formData, prefix: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+            <input value={formData.prefix} onChange={e => setFormData({...formData, prefix: e.target.value})} className="admin-input" />
           </div>
           <div className="w-[120px]">
             <label className="block text-xs font-semibold text-gray-600 mb-1">Giá trị số</label>
-            <input required type="number" value={formData.value} onChange={e => setFormData({...formData, value: Number(e.target.value)})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+            <input required type="number" value={formData.value} onChange={e => setFormData({...formData, value: Number(e.target.value)})} className="admin-input" />
           </div>
           <div className="w-[80px]">
              <label className="block text-xs font-semibold text-gray-600 mb-1">Suffix</label>
-             <input value={formData.suffix} onChange={e => setFormData({...formData, suffix: e.target.value})} className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500" />
+             <input value={formData.suffix} onChange={e => setFormData({...formData, suffix: e.target.value})} className="admin-input" />
           </div>
           <button type="submit" disabled={figures.length >= 8} className="bg-orange-500 hover:bg-orange-600 text-white rounded px-4 py-2 font-semibold text-sm disabled:opacity-50 h-[38px]">Thêm</button>
         </form>
@@ -376,8 +364,8 @@ function SectionsTab() {
   }
 
   return (
-     <div className="bg-white border text-sm border-gray-200 rounded-xl overflow-hidden shadow-sm max-w-4xl">
-        <table className="w-full text-left border-collapse">
+     <div className="bg-white border text-sm border-gray-200 rounded-xl overflow-x-auto shadow-sm max-w-4xl">
+        <table className="admin-table">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
               <th className="px-4 py-3 font-semibold text-gray-600">Thứ tự</th>

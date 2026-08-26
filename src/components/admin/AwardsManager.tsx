@@ -145,7 +145,7 @@ export default function AwardsManager() {
                 required
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
                 placeholder="VD: Cúp vàng chất lượng..."
               />
             </div>
@@ -154,7 +154,7 @@ export default function AwardsManager() {
               <input
                 value={newIssuer}
                 onChange={(e) => setNewIssuer(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
               />
             </div>
             <div className="flex flex-col gap-1.5 lg:col-span-1">
@@ -162,7 +162,7 @@ export default function AwardsManager() {
               <input
                 value={newYear}
                 onChange={(e) => setNewYear(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
               />
             </div>
             <div className="flex flex-col gap-1.5 lg:col-span-1">
@@ -181,7 +181,7 @@ export default function AwardsManager() {
               <input
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
               />
             </div>
             <button
@@ -223,13 +223,13 @@ export default function AwardsManager() {
                           autoFocus
                           value={editTitle}
                           onChange={(e) => setEditTitle(e.target.value)}
-                          className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500"
+                          className="admin-input"
                           placeholder="Tên giải"
                         />
                         <input
                           value={editDesc}
                           onChange={(e) => setEditDesc(e.target.value)}
-                          className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500 text-gray-500"
+                          className="admin-input text-gray-500"
                           placeholder="Mô tả..."
                         />
                         <div className="mt-2 text-left">
@@ -253,7 +253,7 @@ export default function AwardsManager() {
                       <input
                         value={editIssuer}
                         onChange={(e) => setEditIssuer(e.target.value)}
-                        className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500"
+                        className="admin-input"
                       />
                     ) : (
                       <span className="text-sm text-gray-600">{item.issuer}</span>
@@ -264,7 +264,7 @@ export default function AwardsManager() {
                       <input
                         value={editYear}
                         onChange={(e) => setEditYear(e.target.value)}
-                        className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500"
+                        className="admin-input"
                       />
                     ) : (
                       item.year

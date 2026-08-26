@@ -232,7 +232,7 @@ export default function FieldsManager() {
                             type="text"
                             value={editName}
                             onChange={(event) => setEditName(event.target.value)}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input"
                           />
                         </div>
                         <div>
@@ -241,7 +241,7 @@ export default function FieldsManager() {
                             type="text"
                             value={editSlug}
                             onChange={(event) => setEditSlug(event.target.value)}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input"
                           />
                         </div>
                         <div>
@@ -250,7 +250,7 @@ export default function FieldsManager() {
                             type="text"
                             value={editIcon}
                             onChange={(event) => setEditIcon(event.target.value)}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input"
                           />
                         </div>
                       </div>
@@ -262,7 +262,7 @@ export default function FieldsManager() {
                             value={editShortDesc}
                             onChange={(event) => setEditShortDesc(event.target.value)}
                             rows={3}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input"
                           />
                         </div>
                         <div>
@@ -271,7 +271,7 @@ export default function FieldsManager() {
                             value={editDesc}
                             onChange={(event) => setEditDesc(event.target.value)}
                             rows={3}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input"
                           />
                         </div>
                       </div>
@@ -285,7 +285,7 @@ export default function FieldsManager() {
                             value={editFeaturesStr}
                             onChange={(event) => setEditFeaturesStr(event.target.value)}
                             rows={5}
-                            className="w-full rounded border border-gray-300 px-3 py-2 font-mono text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input font-mono"
                             placeholder="Diem 1&#10;Diem 2"
                           />
                         </div>
@@ -297,7 +297,7 @@ export default function FieldsManager() {
                             value={editServicesStr}
                             onChange={(event) => setEditServicesStr(event.target.value)}
                             rows={5}
-                            className="w-full rounded border border-gray-300 px-3 py-2 font-mono text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input font-mono"
                             placeholder="Dich vu A&#10;Dich vu B"
                           />
                         </div>
@@ -307,7 +307,7 @@ export default function FieldsManager() {
                             value={editStatsStr}
                             onChange={(event) => setEditStatsStr(event.target.value)}
                             rows={5}
-                            className="w-full rounded border border-gray-300 px-3 py-2 font-mono text-sm focus:border-orange-500 focus:outline-none"
+                            className="admin-input font-mono"
                           />
                         </div>
                       </div>
@@ -333,7 +333,7 @@ export default function FieldsManager() {
                             value={editArticleContent}
                             onChange={(event) => setEditArticleContent(event.target.value)}
                             rows={10}
-                            className="w-full rounded border border-gray-300 px-3 py-2 text-sm leading-relaxed focus:border-orange-500 focus:outline-none"
+                            className="admin-textarea leading-relaxed"
                             placeholder="Nhap noi dung bai viet chi tiet. Co the xuong dong va tach doan de hien thi thanh nhieu doan van."
                           />
                           <p className="mt-2 text-xs text-gray-500">

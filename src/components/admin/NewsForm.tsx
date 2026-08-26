@@ -138,7 +138,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
             <input
               {...register('title')}
               type="text"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
               placeholder="Nhập tiêu đề bài viết..."
             />
           </FormField>
@@ -151,7 +151,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
                 setSlugModified(true)
                 setValue('slug', event.target.value, { shouldValidate: true, shouldDirty: true })
               }}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
               placeholder="duong-dan-bai-viet"
             />
           </FormField>
@@ -191,7 +191,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
           <FormField label="Chuyên mục" required error={errors.category?.message}>
             <select
               {...register('category')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             >
               <option value="Tin tức">Tin tức</option>
               <option value="Sự kiện">Sự kiện</option>
@@ -204,7 +204,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
             <input
               {...register('date')}
               type="date"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 
@@ -212,7 +212,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
             <input
               {...register('author')}
               type="text"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 
@@ -222,7 +222,7 @@ export default function NewsForm({ initialData, mode }: NewsFormProps) {
               type="number"
               min={1}
               max={30}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:border-orange-500 focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 

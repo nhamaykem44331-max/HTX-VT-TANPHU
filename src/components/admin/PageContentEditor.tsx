@@ -153,7 +153,7 @@ function InputField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+        className="admin-input"
       />
     </div>
   )
@@ -180,7 +180,7 @@ function TextareaField({
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         rows={rows}
-        className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm leading-relaxed focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+        className="admin-input"
       />
     </div>
   )
@@ -306,14 +306,14 @@ function StringListEditor({
                 onChange={(event) => updateItem(index, event.target.value)}
                 rows={4}
                 placeholder={placeholder}
-                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                className="admin-input"
               />
             ) : (
               <input
                 value={item}
                 onChange={(event) => updateItem(index, event.target.value)}
                 placeholder={placeholder}
-                className="w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-500/20"
+                className="admin-input"
               />
             )}
           </div>

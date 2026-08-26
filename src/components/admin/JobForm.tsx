@@ -118,7 +118,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
           <FormField label="Tên vị trí" required error={errors.title?.message}>
             <input
               {...register('title')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              className="admin-input"
               placeholder="VD: Kế toán trưởng..."
             />
           </FormField>
@@ -127,7 +127,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
             <textarea
               {...register('description')}
               rows={6}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-y"
+              className="admin-textarea"
               placeholder="Mô tả tóm tắt về công việc..."
             />
           </FormField>
@@ -140,7 +140,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
                 <div className="flex-1 flex flex-col gap-1">
                   <input
                     {...register(`requirements.${index}.value` as const)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                    className="admin-input"
                     placeholder={`Yêu cầu ${index + 1}...`}
                   />
                   {errors.requirements?.[index]?.value && (
@@ -170,7 +170,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
                 <div className="flex-1 flex flex-col gap-1">
                   <input
                     {...register(`benefits.${index}.value` as const)}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+                    className="admin-input"
                     placeholder={`Quyền lợi ${index + 1}...`}
                   />
                   {errors.benefits?.[index]?.value && (
@@ -203,21 +203,21 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
           <FormField label="Phòng ban" required error={errors.department?.message}>
             <input
               {...register('department')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 
           <FormField label="Địa điểm làm việc" required error={errors.location?.message}>
             <input
               {...register('location')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 
           <FormField label="Lĩnh vực" required error={errors.fieldId?.message}>
             <select
               {...register('fieldId')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             >
               <option value="">Chọn lĩnh vực...</option>
               {fields.map((f) => (
@@ -229,7 +229,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
           <FormField label="Loại hình" required error={errors.type?.message}>
             <select
               {...register('type')}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             >
               <option value="full-time">Toàn thời gian (Full-time)</option>
               <option value="part-time">Bán thời gian (Part-time)</option>
@@ -241,7 +241,7 @@ export default function JobForm({ initialData, mode }: JobFormProps) {
             <input
               {...register('deadline')}
               type="date"
-              className="w-full rounded-lg border border-gray-300 px-3 py-2.5 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
             />
           </FormField>
 

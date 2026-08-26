@@ -82,11 +82,14 @@ export default function ContactInbox() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-theme(spacing.24))] -m-6 relative overflow-hidden bg-gray-50">
-      <div className={clsx("flex-1 flex flex-col p-6 transition-all duration-300", selectedContact ? "mr-[400px]" : "")}>
+    <div className="relative flex">
+      <div className={clsx("flex min-w-0 flex-1 flex-col transition-all duration-300", selectedContact ? "xl:mr-[400px]" : "")}>
         <div className="space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="font-heading text-2xl font-bold text-gray-900">Form liên hệ từ khách hàng</h1>
+          <div>
+            <h1 className="font-heading text-2xl font-bold text-gray-900">Form liên hệ</h1>
+            <p className="mt-1 text-sm text-gray-500">
+              Yêu cầu tư vấn khách gửi từ trang Liên hệ. Đổi trạng thái để không bỏ sót ai.
+            </p>
           </div>
 
           <div className="flex space-x-1 bg-white p-1 rounded-lg border border-gray-200 inline-flex shadow-sm">
@@ -118,7 +121,7 @@ export default function ContactInbox() {
             })}
           </div>
 
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden h-[calc(100vh-220px)] flex flex-col">
+          <div className="admin-card flex max-h-[calc(100vh-300px)] min-h-[320px] flex-col overflow-hidden">
             <div className="overflow-auto flex-1">
               {loading ? (
                 <div className="p-8 text-center text-gray-500">Đang tải biểu mẫu...</div>
@@ -131,7 +134,7 @@ export default function ContactInbox() {
                   <p className="text-sm text-gray-400 mt-1">Form sẽ xuất hiện ở đây khi khách hàng gửi từ website.</p>
                 </div>
               ) : (
-                <table className="w-full text-left border-collapse">
+                <table className="admin-table">
                   <thead className="sticky top-0 bg-gray-50 z-10 border-b border-gray-200 shadow-[0_1px_0_0_#e5e7eb]">
                     <tr>
                       <th className="px-6 py-4 text-xs font-semibold text-gray-600 uppercase tracking-wider">Khách hàng</th>
@@ -187,7 +190,7 @@ export default function ContactInbox() {
       {/* DETAIL PANEL SLIDE OVER */}
       <div 
         className={clsx(
-          "absolute top-0 right-0 bottom-0 w-[400px] bg-white border-l border-gray-200 shadow-xl transition-transform duration-300 ease-in-out flex flex-col z-20",
+          "fixed inset-y-0 right-0 z-40 flex w-full max-w-[400px] flex-col border-l border-gray-200 bg-white shadow-xl transition-transform duration-300 ease-in-out",
           selectedContact ? "translate-x-0" : "translate-x-full"
         )}
       >

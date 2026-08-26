@@ -108,10 +108,15 @@ export default function MediaLibraryPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <h1 className="font-heading text-2xl font-bold text-gray-900 flex items-center gap-2">
-          <ImageIcon className="text-orange-500" />
-          Thư viện ảnh
-        </h1>
+        <div>
+          <h1 className="font-heading text-2xl font-bold text-gray-900 flex items-center gap-2">
+            <ImageIcon className="text-orange-500" />
+            Thư viện ảnh
+          </h1>
+          <p className="mt-1 text-sm text-gray-500">
+            Ảnh dùng chung cho mọi trang. Chọn thư mục để lọc theo mục đích sử dụng.
+          </p>
+        </div>
         <button
           onClick={() => {
             setUploadFolder(activeFolder === 'all' ? 'general' : activeFolder)
@@ -210,7 +215,7 @@ export default function MediaLibraryPage() {
                  <select 
                    value={uploadFolder} 
                    onChange={(e) => setUploadFolder(e.target.value)}
-                   className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none"
+                   className="admin-input"
                  >
                    {FOLDERS.filter(f => f.id !== 'all').map(f => (
                      <option key={f.id} value={f.id}>{f.label} ({f.id})</option>

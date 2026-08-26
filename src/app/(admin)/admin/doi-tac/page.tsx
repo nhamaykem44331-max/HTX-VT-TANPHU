@@ -6,6 +6,7 @@ import DeleteConfirm from '@/components/admin/DeleteConfirm'
 import ImageUploader from '@/components/admin/ImageUploader'
 import { supabase } from '@/lib/supabase'
 import type { Partner } from '@/lib/types'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 
 const CATEGORIES = [
   { value: 'thep', label: 'Thép' },
@@ -206,7 +207,11 @@ export default function PartnersAdminPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="font-heading text-2xl font-bold text-gray-900">Quản lý Đối tác</h1>
+      <AdminPageHeader
+        title="Đối tác"
+        description="Logo đối tác chạy ngang ở trang chủ. Kéo thứ tự để đổi vị trí hiển thị."
+        viewUrl="/"
+      />
 
       {isFallbackMode ? (
         <div className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
@@ -223,7 +228,7 @@ export default function PartnersAdminPage() {
               required
               value={newName}
               onChange={(event) => setNewName(event.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
               placeholder="VD: Samsung..."
               disabled={isFallbackMode}
             />
@@ -233,7 +238,7 @@ export default function PartnersAdminPage() {
             <select
               value={newCategory}
               onChange={(event) => setNewCategory(event.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
               disabled={isFallbackMode}
             >
               {CATEGORIES.map((category) => (
@@ -249,7 +254,7 @@ export default function PartnersAdminPage() {
               type="number"
               value={newOrder}
               onChange={(event) => setNewOrder(event.target.value)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-orange-500"
+              className="admin-input"
               disabled={isFallbackMode}
             />
           </div>
@@ -305,7 +310,7 @@ export default function PartnersAdminPage() {
                             autoFocus
                             value={editName}
                             onChange={(event) => setEditName(event.target.value)}
-                            className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500"
+                            className="admin-input"
                           />
                           <ImageUploader
                             value={editLogo}
@@ -331,7 +336,7 @@ export default function PartnersAdminPage() {
                         <select
                           value={editCategory}
                           onChange={(event) => setEditCategory(event.target.value)}
-                          className="w-full rounded border border-gray-300 px-2 py-1 text-sm focus:ring-2 focus:ring-orange-500"
+                          className="admin-input"
                         >
                           {CATEGORIES.map((category) => (
                             <option key={category.value} value={category.value}>

@@ -150,7 +150,7 @@ export default function EquipmentsManager() {
                 type="text"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                className="admin-input"
                 placeholder="VD: Xe tải 40 tấn Hyundai"
               />
             </div>
@@ -160,7 +160,7 @@ export default function EquipmentsManager() {
                 required
                 value={newCat}
                 onChange={(e) => setNewCat(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                className="admin-input"
               >
                 {categories.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
@@ -172,7 +172,7 @@ export default function EquipmentsManager() {
                 type="text"
                 value={newDesc}
                 onChange={(e) => setNewDesc(e.target.value)}
-                className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none"
+                className="admin-input"
                 placeholder="VD: Trọng tải 40 tấn, trang bị GPS Vietmap"
              />
           </div>
@@ -221,7 +221,7 @@ export default function EquipmentsManager() {
                           type="text"
                           value={editName}
                           onChange={(e) => setEditName(e.target.value)}
-                          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+                          className="admin-input"
                         />
                       </div>
                       <div>
@@ -229,7 +229,7 @@ export default function EquipmentsManager() {
                         <select
                           value={editCat}
                           onChange={(e) => setEditCat(e.target.value)}
-                          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+                          className="admin-input"
                         >
                            {categories.map((c) => <option key={c} value={c}>{c}</option>)}
                         </select>
@@ -241,7 +241,7 @@ export default function EquipmentsManager() {
                           type="text"
                           value={editDesc}
                           onChange={(e) => setEditDesc(e.target.value)}
-                          className="w-full rounded border border-gray-300 px-3 py-2 text-sm"
+                          className="admin-input"
                       />
                     </div>
                     <div>

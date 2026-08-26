@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { AlertCircle, KeyRound, Save, ShieldCheck, UserPlus } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
+import AdminPageHeader from '@/components/admin/AdminPageHeader'
 
 const INITIAL_SETTINGS = {
   hotline: '0208.383.2608',
@@ -223,7 +224,10 @@ export default function SettingsAdminPage() {
 
   return (
     <div className="max-w-6xl space-y-6">
-      <h1 className="font-heading text-2xl font-bold text-gray-900">Cài đặt Website</h1>
+      <AdminPageHeader
+        title="Cài đặt"
+        description="Tài khoản quản trị và thông tin chung của website."
+      />
 
       {errorMsg ? (
         <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
@@ -250,7 +254,7 @@ export default function SettingsAdminPage() {
                   name="hotline"
                   value={settings.hotline}
                   onChange={handleChangeSetting}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -259,7 +263,7 @@ export default function SettingsAdminPage() {
                   name="email"
                   value={settings.email}
                   onChange={handleChangeSetting}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
             </div>
@@ -271,7 +275,7 @@ export default function SettingsAdminPage() {
                 value={settings.address}
                 onChange={handleChangeSetting}
                 placeholder="VD: Số 200, đường ..., Thái Nguyên"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
               />
             </div>
 
@@ -283,7 +287,7 @@ export default function SettingsAdminPage() {
                   value={settings.facebook}
                   onChange={handleChangeSetting}
                   placeholder="https://facebook.com/..."
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -293,7 +297,7 @@ export default function SettingsAdminPage() {
                   value={settings.zalo}
                   onChange={handleChangeSetting}
                   placeholder="https://zalo.me/..."
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
             </div>
@@ -305,7 +309,7 @@ export default function SettingsAdminPage() {
                 value={settings.slogan}
                 onChange={handleChangeSetting}
                 placeholder="Khẳng định thương hiệu - Vững bước tương lai"
-                className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="admin-input"
               />
             </div>
 
@@ -429,7 +433,7 @@ export default function SettingsAdminPage() {
                   value={newUsername}
                   onChange={(event) => setNewUsername(event.target.value)}
                   placeholder="vd: admin.marketing"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -438,7 +442,7 @@ export default function SettingsAdminPage() {
                   value={newDisplayName}
                   onChange={(event) => setNewDisplayName(event.target.value)}
                   placeholder="Nguyễn Văn A"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -448,7 +452,7 @@ export default function SettingsAdminPage() {
                   value={newPassword}
                   onChange={(event) => setNewPassword(event.target.value)}
                   placeholder="Tối thiểu 8 ký tự, gồm chữ và số"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -457,7 +461,7 @@ export default function SettingsAdminPage() {
                   type="password"
                   value={newPasswordConfirm}
                   onChange={(event) => setNewPasswordConfirm(event.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
 
@@ -490,7 +494,7 @@ export default function SettingsAdminPage() {
                   type="password"
                   value={currentPassword}
                   onChange={(event) => setCurrentPassword(event.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -500,7 +504,7 @@ export default function SettingsAdminPage() {
                   value={nextPassword}
                   onChange={(event) => setNextPassword(event.target.value)}
                   placeholder="Tối thiểu 8 ký tự, gồm chữ và số"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
               <div>
@@ -509,7 +513,7 @@ export default function SettingsAdminPage() {
                   type="password"
                   value={nextPasswordConfirm}
                   onChange={(event) => setNextPasswordConfirm(event.target.value)}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="admin-input"
                 />
               </div>
 
