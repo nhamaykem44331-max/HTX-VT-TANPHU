@@ -7,6 +7,7 @@ import {
   Briefcase,
   ExternalLink,
   Factory,
+  FileText,
   Handshake,
   Home,
   Image as ImageIcon,
@@ -29,7 +30,7 @@ interface NavItem {
   label: string
   icon: LucideIcon
   exact?: boolean
-  badge?: 'inbox'
+  badge?: 'inbox' | 'applications'
 }
 
 interface NavGroup {
@@ -66,7 +67,10 @@ const navGroups: NavGroup[] = [
   },
   {
     title: 'Hộp thư',
-    items: [{ href: '/admin/hop-thu', label: 'Form liên hệ', icon: Inbox, badge: 'inbox' }],
+    items: [
+      { href: '/admin/hop-thu', label: 'Form liên hệ', icon: Inbox, badge: 'inbox' },
+      { href: '/admin/ho-so-ung-tuyen', label: 'Hồ sơ ứng tuyển', icon: FileText, badge: 'applications' },
+    ],
   },
 ]
 
@@ -74,23 +78,36 @@ export default function AdminSidebar() {
   const pathname = usePathname()
   const router = useRouter()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [unread, setUnread] = useState(0)
+  const [counts, setCounts] = useState({ inbox: 0, applications: 0 })
 
-  // Đếm form liên hệ chưa xử lý để hiện badge trên menu
+  // Đếm form liên hệ và hồ sơ ứng tuyển chưa xử lý để hiện badge trên menu
   useEffect(() => {
     let cancelled = false
 
-    const loadUnread = async () => {
-      const { count } = await supabase
-        .from('contact_submissions')
-        .select('id', { count: 'exact', head: true })
-        .eq('status', 'new')
+    const loadCounts = async () => {
+      const [contacts, applications] = await Promise.all([
+        supabase
+          .from('contact_submissions')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new'),
+        supabase
+          .from('job_applications')
+          .select('id', { count: 'exact', head: true })
+          .eq('status', 'new'),
+      ])
 
-      if (!cancelled) setUnread(count ?? 0)
+      if (cancelled) return
+
+      // job_applications có thể chưa tồn tại nếu chưa chạy migration — bỏ qua lỗi,
+      // badge chỉ là thông tin phụ, không được làm hỏng cả sidebar.
+      setCounts({
+        inbox: contacts.count ?? 0,
+        applications: applications.error ? 0 : applications.count ?? 0,
+      })
     }
 
-    loadUnread()
-    const timer = setInterval(loadUnread, 60_000)
+    loadCounts()
+    const timer = setInterval(loadCounts, 60_000)
 
     return () => {
       cancelled = true
@@ -139,7 +156,8 @@ export default function AdminSidebar() {
             <div className="space-y-0.5">
               {group.items.map((item) => {
                 const active = isActive(item.href, item.exact)
-                const showBadge = item.badge === 'inbox' && unread > 0
+                const badgeCount = item.badge ? counts[item.badge] : 0
+                const showBadge = badgeCount > 0
                 return (
                   <Link
                     key={item.href}
@@ -155,7 +173,7 @@ export default function AdminSidebar() {
                           active ? 'bg-white text-orange-600' : 'bg-orange-500 text-white'
                         }`}
                       >
-                        {unread}
+                        {badgeCount}
                       </span>
                     ) : null}
                   </Link>

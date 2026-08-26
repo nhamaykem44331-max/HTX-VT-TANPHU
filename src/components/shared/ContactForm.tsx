@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { SERVICES_FOR_CONTACT } from "@/lib/constants";
 import type { ContactFormData } from "@/lib/types";
 
@@ -29,6 +29,7 @@ export default function ContactForm({
   className = "",
 }: ContactFormProps) {
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const {
     register,
     handleSubmit,
@@ -37,6 +38,8 @@ export default function ContactForm({
   } = useForm<ContactFormData>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: ContactFormData) => {
+    setSubmitError("")
+
     try {
       const { error } = await supabase.from('contact_submissions').insert({
         name: data.name,
@@ -46,15 +49,17 @@ export default function ContactForm({
         message: data.message,
       })
       if (error) throw error
+
+      // Chỉ báo thành công khi yêu cầu thật sự đã được lưu — báo thành công
+      // lúc lưu hỏng sẽ khiến khách tưởng đã gửi trong khi dữ liệu mất hẳn.
       setSubmitted(true)
       reset()
       setTimeout(() => setSubmitted(false), 5000)
     } catch (err) {
       console.error('Submit error:', err)
-      // Fallback: vẫn hiện thành công cho UX (data sẽ mất nếu Supabase chưa setup)
-      setSubmitted(true)
-      reset()
-      setTimeout(() => setSubmitted(false), 5000)
+      setSubmitError(
+        "Không gửi được yêu cầu. Vui lòng thử lại, hoặc gọi hotline 0208.383.2608 để được hỗ trợ ngay."
+      )
     }
   };
 
@@ -75,6 +80,14 @@ export default function ContactForm({
       {title && (
         <h3 className="font-heading text-xl font-bold text-gray-900 mb-6">{title}</h3>
       )}
+
+      {submitError && (
+        <div className="flex items-start gap-2.5 rounded-sm border border-red-200 bg-red-50 px-4 py-3">
+          <AlertCircle size={17} className="mt-0.5 shrink-0 text-red-500" />
+          <p className="text-sm text-red-700">{submitError}</p>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         <div>
           <label className="block text-sm font-semibold text-gray-700 mb-1.5">

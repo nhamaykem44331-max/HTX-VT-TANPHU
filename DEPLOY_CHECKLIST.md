@@ -55,6 +55,7 @@ Neu thay doi bang, seed du lieu, bucket, policy, hoac logic upload:
 1. Cap nhat mot trong cac file:
    - `supabase-schema.sql`
    - `supabase-storage-setup.sql`
+   - `supabase-job-applications-migration.sql`
    - `run-sql.mjs`
 2. Dam bao `.env.local` co `SUPABASE_DB_URL`.
 3. Chay:
@@ -75,7 +76,10 @@ npm run supabase:setup
    - `key_figures`
    - `fields`
    - `equipments`
+   - `job_applications`
 5. Xac nhan bucket `website-images` van hoat dong.
+6. Xac nhan bucket `cv-uploads` ton tai va dang o che do RIENG TU (public = false).
+   CV chua thong tin ca nhan ung vien, khong duoc de bucket nay cong khai.
 
 ## 6. Checklist env tren Vercel
 

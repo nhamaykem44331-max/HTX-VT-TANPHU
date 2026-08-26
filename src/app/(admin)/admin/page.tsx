@@ -4,6 +4,7 @@ import {
   Briefcase,
   ExternalLink,
   Factory,
+  FileText,
   Home,
   Image as ImageIcon,
   Inbox,
@@ -39,10 +40,10 @@ const quickActions = [
     icon: Inbox,
   },
   {
-    href: '/admin/tuyen-dung',
-    label: 'Đăng tin tuyển dụng',
-    hint: 'Thêm vị trí đang cần người',
-    icon: Briefcase,
+    href: '/admin/ho-so-ung-tuyen',
+    label: 'Xem hồ sơ ứng tuyển',
+    hint: 'Ứng viên nộp từ trang Tuyển dụng',
+    icon: FileText,
   },
 ]
 
