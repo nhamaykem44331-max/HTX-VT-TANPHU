@@ -45,7 +45,7 @@ Bien local thuong dung:
 - `SUPABASE_DB_URL`
 - `SUPABASE_SERVICE_ROLE_KEY` neu co
 - `ADMIN_USERNAME`
-- `ADMIN_PASSWORD_HASH` hoac de trong de dung fallback dev
+- `ADMIN_PASSWORD_HASH` (de trong = tat dang nhap bang env; khong con mat khau mac dinh trong code)
 - `JWT_SECRET`
 
 ## 5. Khi co thay doi lien quan Supabase
@@ -101,9 +101,9 @@ npm run supabase:setup
 
 Luu y rat quan trong:
 - Neu set `ADMIN_PASSWORD_HASH` bang Vercel CLI tren Windows PowerShell theo kieu pipe hoac echo sai cach, value rat de bi dinh `\\r\\n`.
-- Khi `ADMIN_PASSWORD_HASH` bi dinh newline, login admin tren production se bao sai tai khoan hoac mat khau du hash nhin co ve dung.
+- Code da `.trim()` gia tri nay nen newline thua o dau/cuoi khong con lam hong login, nhung van nen set dung de tranh loi khac.
 - Cach an toan hon tren Windows la dung `cmd /c` voi `--value`.
-- Neu chua can hash rieng, co the bo `ADMIN_PASSWORD_HASH` de app dung fallback hien tai trong code.
+- Khong con fallback mat khau mac dinh: bo `ADMIN_PASSWORD_HASH` thi chi dang nhap duoc bang tai khoan trong bang `admin_users`.
 
 ## 7. Cach dang nhap Vercel CLI dung cho du an nay
 
@@ -223,7 +223,7 @@ Neu login production loi:
 1. Kiem tra `ADMIN_USERNAME`
 2. Kiem tra `JWT_SECRET`
 3. Neu dang dung `ADMIN_PASSWORD_HASH`, kiem tra xem value tren Vercel co bi dinh newline khong.
-4. Neu nghi ngo hash loi, tam xoa `ADMIN_PASSWORD_HASH` de quay ve fallback hien tai cua code.
+4. Neu nghi ngo hash loi, tao hash moi bang `node -e "console.log(require('bcryptjs').hashSync('mat-khau-moi', 10))"` roi set lai. Khong con fallback mat khau mac dinh trong code.
 5. Redeploy production lai sau khi sua env.
 
 ## 14. Khi nao can commit them sau deploy

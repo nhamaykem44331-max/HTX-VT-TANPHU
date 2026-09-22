@@ -26,7 +26,10 @@ export async function POST(request: NextRequest) {
     })
 
     return response
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Lỗi server' }, { status: 500 })
+  } catch (error) {
+    // Khong tra loi goc (vd loi ket noi Postgres) ra man hinh dang nhap cong khai;
+    // chi tiet nam trong runtime log cua Vercel.
+    console.error('[api/auth/login] loi khi xac thuc admin:', error)
+    return NextResponse.json({ error: 'Lỗi hệ thống khi đăng nhập. Vui lòng thử lại sau.' }, { status: 500 })
   }
 }
