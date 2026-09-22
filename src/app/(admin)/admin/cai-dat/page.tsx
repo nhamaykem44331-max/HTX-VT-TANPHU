@@ -432,7 +432,7 @@ export default function SettingsAdminPage() {
                 <input
                   value={newUsername}
                   onChange={(event) => setNewUsername(event.target.value)}
-                  placeholder="vd: admin.marketing"
+                  placeholder="vd: admin.marketing hoặc ten@email.com"
                   className="admin-input"
                 />
               </div>
