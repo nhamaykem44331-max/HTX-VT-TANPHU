@@ -89,7 +89,8 @@ export default async function TinTucPage() {
                 <img
                   src={featured.image}
                   alt={featured.title}
-                  className="min-h-[260px] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  // Mobile: giữ khung 16:9 để ảnh ngang (logo đối tác, banner) không bị cắt hai bên
+                  className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105 md:aspect-auto md:min-h-[260px]"
                 />
               ) : (
                 <ImagePlaceholder

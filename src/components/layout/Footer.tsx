@@ -12,9 +12,13 @@ export default function Footer() {
           {/* Col 1: Về HTX */}
           <div>
             <div className="flex items-center gap-3 mb-5">
-              <img 
-                src="/images/logo.png" 
-                alt="Logo HTX Tân Phú" 
+              <img
+                src="/images/logo-192.png"
+                alt="Logo HTX Tân Phú"
+                width={192}
+                height={192}
+                loading="lazy"
+                decoding="async"
                 className="h-12 w-auto object-contain rounded-sm bg-white p-1"
               />
               <div>

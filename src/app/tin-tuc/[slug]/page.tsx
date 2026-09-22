@@ -76,8 +76,11 @@ export default async function TinTucDetailPage({
           <Breadcrumb
             items={[
               { label: "Tin tức", href: "/tin-tuc" },
-              { label: article.category, href: "/tin-tuc" },
-              { label: article.title.slice(0, 40) + "..." },
+              // Chuyên mục trùng tên mục "Tin tức" thì bỏ, tránh hiện "Tin tức › Tin tức"
+              ...(article.category && article.category.trim().toLowerCase() !== "tin tức"
+                ? [{ label: article.category, href: "/tin-tuc" }]
+                : []),
+              { label: article.title.length > 40 ? article.title.slice(0, 40).trimEnd() + "…" : article.title },
             ]}
           />
         </div>
