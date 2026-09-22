@@ -99,6 +99,25 @@ npm run supabase:setup
 
 - `ADMIN_PASSWORD_HASH`
 
+### Bien cho chuc nang "Quen mat khau" (gui link dat lai qua email)
+
+- `SMTP_USER`: dia chi Gmail dung de gui mail
+- `SMTP_PASS`: Mat khau ung dung (App Password) 16 ky tu cua Gmail do, KHONG phai mat khau Gmail thuong.
+  Tao tai https://myaccount.google.com/apppasswords (can bat xac minh 2 buoc truoc).
+- `ADMIN_RECOVERY_EMAIL`: email chu website. Tai khoan nao chua luu email rieng trong bang `admin_users`
+  (vi du tai khoan `admin` fallback) se nhan link dat lai tai email nay.
+- `SMTP_HOST`, `SMTP_PORT`, `MAIL_FROM`: tuy chon, mac dinh `smtp.gmail.com`, `465`, `HTX Tan Phu <SMTP_USER>`.
+- `PASSWORD_RESET_BASE_URL`: tuy chon. Production mac dinh dung `SITE_URL` trong `src/lib/seo.ts`.
+
+Chuc nang nay can `SUPABASE_DB_URL`. Cot `admin_users.email` va bang `admin_password_resets` duoc code tu tao
+lan dau su dung (idempotent), hoac chay `npm run supabase:setup` / file `supabase-admin-password-reset-migration.sql`.
+
+Luong su dung:
+1. Mo `/admin/quen-mat-khau`, nhap ten dang nhap hoac email khoi phuc.
+2. Mo email, bam link `/admin/dat-lai-mat-khau?token=...` (hieu luc 30 phut, dung 1 lan).
+3. Dat mat khau moi roi dang nhap lai.
+4. Sau khi dang nhap, vao `/admin/cai-dat` > "Email khoi phuc" de luu email rieng cho tai khoan.
+
 Luu y rat quan trong:
 - Neu set `ADMIN_PASSWORD_HASH` bang Vercel CLI tren Windows PowerShell theo kieu pipe hoac echo sai cach, value rat de bi dinh `\\r\\n`.
 - Khi `ADMIN_PASSWORD_HASH` bi dinh newline, login admin tren production se bao sai tai khoan hoac mat khau du hash nhin co ve dung.

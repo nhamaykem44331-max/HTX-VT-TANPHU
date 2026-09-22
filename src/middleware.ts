@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { jwtVerify } from 'jose'
+import { isPublicAdminPath } from '@/lib/admin-public-paths'
 
 const COOKIE_NAME = 'htx-admin-token'
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-dev-secret-change-in-production'
@@ -22,8 +23,8 @@ export async function middleware(request: NextRequest) {
   const requestHeaders = new Headers(request.headers)
   requestHeaders.set('x-pathname', pathname)
 
-  // Chỉ check auth cho /admin/* (trừ /admin/login và /api/auth/*)
-  const isAdminPath = pathname.startsWith('/admin') && !pathname.startsWith('/admin/login')
+  // Chỉ check auth cho /admin/* (trừ các trang công khai: login, quên/đặt lại mật khẩu và /api/auth/*)
+  const isAdminPath = pathname.startsWith('/admin') && !isPublicAdminPath(pathname)
   const isApiAuth = pathname.startsWith('/api/auth')
 
   if (isAdminPath && !isApiAuth) {

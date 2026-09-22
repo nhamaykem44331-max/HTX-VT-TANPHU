@@ -6,6 +6,8 @@ import { isAdminDatabaseConfigured, queryAdminDb } from '@/lib/admin-db'
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-dev-secret-change-in-production'
 const COOKIE_NAME = 'htx-admin-token'
 const ENV_ADMIN_USERNAME = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase()
+/** Email nhận link đặt lại mật khẩu khi tài khoản chưa lưu email riêng trong database. */
+const ADMIN_RECOVERY_EMAIL = (process.env.ADMIN_RECOVERY_EMAIL || '').trim().toLowerCase()
 
 export type AdminAuthSource = 'database' | 'env'
 
@@ -21,6 +23,7 @@ interface AdminUserRow {
   id: string
   username: string
   display_name: string | null
+  email: string | null
   password_hash: string
   is_active: boolean
   created_at: string | null
@@ -35,16 +38,20 @@ interface TokenPayload {
   authSource?: AdminAuthSource
 }
 
-function normalizeUsername(username: string) {
+export function normalizeUsername(username: string) {
   return username.trim().toLowerCase()
 }
 
-async function getDatabaseAdminByUsername(username: string): Promise<AdminUserRow | null> {
+export function normalizeEmail(email: string) {
+  return email.trim().toLowerCase()
+}
+
+export async function getDatabaseAdminByUsername(username: string): Promise<AdminUserRow | null> {
   if (!isAdminDatabaseConfigured()) return null
 
   const result = await queryAdminDb<AdminUserRow>(
     `
-      SELECT id, username, display_name, password_hash, is_active, created_at, updated_at
+      SELECT id, username, display_name, email, password_hash, is_active, created_at, updated_at
       FROM public.admin_users
       WHERE username = $1
       LIMIT 1
@@ -57,7 +64,25 @@ async function getDatabaseAdminByUsername(username: string): Promise<AdminUserRo
   return user
 }
 
-async function verifyEnvCredentials(username: string, password: string): Promise<boolean> {
+export async function getDatabaseAdminByEmail(email: string): Promise<AdminUserRow | null> {
+  if (!isAdminDatabaseConfigured()) return null
+
+  const result = await queryAdminDb<AdminUserRow>(
+    `
+      SELECT id, username, display_name, email, password_hash, is_active, created_at, updated_at
+      FROM public.admin_users
+      WHERE LOWER(email) = $1
+      LIMIT 1
+    `,
+    [normalizeEmail(email)]
+  )
+
+  const user = result.rows[0] || null
+  if (!user || !user.is_active) return null
+  return user
+}
+
+export async function verifyEnvCredentials(username: string, password: string): Promise<boolean> {
   if (normalizeUsername(username) !== ENV_ADMIN_USERNAME) return false
 
   const passwordHash = process.env.ADMIN_PASSWORD_HASH || ''
@@ -165,15 +190,16 @@ export async function listAdminUsers() {
     id: string
     username: string
     displayName: string | null
+    email: string | null
     authSource: AdminAuthSource
     isActive: boolean
     createdAt: string | null
   }> = []
 
   if (isAdminDatabaseConfigured()) {
-    const result = await queryAdminDb<Pick<AdminUserRow, 'id' | 'username' | 'display_name' | 'is_active' | 'created_at'>>(
+    const result = await queryAdminDb<Pick<AdminUserRow, 'id' | 'username' | 'display_name' | 'email' | 'is_active' | 'created_at'>>(
       `
-        SELECT id, username, display_name, is_active, created_at
+        SELECT id, username, display_name, email, is_active, created_at
         FROM public.admin_users
         ORDER BY created_at ASC
       `
@@ -184,6 +210,7 @@ export async function listAdminUsers() {
         id: user.id,
         username: user.username,
         displayName: user.display_name || null,
+        email: user.email || null,
         authSource: 'database' as const,
         isActive: user.is_active,
         createdAt: user.created_at || null,
@@ -197,6 +224,7 @@ export async function listAdminUsers() {
       id: 'env-admin',
       username: ENV_ADMIN_USERNAME,
       displayName: 'Tài khoản hệ thống',
+      email: ADMIN_RECOVERY_EMAIL || null,
       authSource: 'env',
       isActive: true,
       createdAt: null,
@@ -209,25 +237,28 @@ export async function listAdminUsers() {
 export async function createDatabaseAdminUser(input: {
   username: string
   displayName?: string
+  email?: string
   password: string
 }) {
   const username = normalizeUsername(input.username)
   const displayName = input.displayName?.trim() || ''
+  const email = input.email ? normalizeEmail(input.email) : null
   const passwordHash = await bcrypt.hash(input.password, 10)
 
   const result = await queryAdminDb<{
     id: string
     username: string
     display_name: string | null
+    email: string | null
     is_active: boolean
     created_at: string | null
   }>(
     `
-      INSERT INTO public.admin_users (username, display_name, password_hash, is_active)
-      VALUES ($1, $2, $3, true)
-      RETURNING id, username, display_name, is_active, created_at
+      INSERT INTO public.admin_users (username, display_name, email, password_hash, is_active)
+      VALUES ($1, $2, $3, $4, true)
+      RETURNING id, username, display_name, email, is_active, created_at
     `,
-    [username, displayName, passwordHash]
+    [username, displayName, email || null, passwordHash]
   )
 
   const data = result.rows[0]
@@ -236,6 +267,7 @@ export async function createDatabaseAdminUser(input: {
     id: data.id,
     username: data.username,
     displayName: data.display_name || null,
+    email: data.email || null,
     authSource: 'database' as const,
     isActive: data.is_active,
     createdAt: data.created_at || null,
@@ -324,6 +356,68 @@ export async function changeAdminPassword(session: AdminSession, currentPassword
   }
 }
 
+export function validateEmail(email: string) {
+  const normalized = normalizeEmail(email)
+  if (!normalized) return 'Email không được để trống.'
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(normalized)) return 'Email không hợp lệ.'
+  return ''
+}
+
+/**
+ * Cập nhật email khôi phục cho tài khoản đang đăng nhập.
+ * Yêu cầu mật khẩu hiện tại để tránh bị đổi email khi lỡ để phiên đăng nhập mở.
+ * Tài khoản env (chưa có trong database) sẽ được chuyển sang database, giống changeAdminPassword.
+ */
+export async function updateAdminRecoveryEmail(session: AdminSession, currentPassword: string, email: string) {
+  const normalizedEmail = normalizeEmail(email)
+  const existingUser = await getDatabaseAdminByUsername(session.username)
+
+  if (existingUser) {
+    const valid = await bcrypt.compare(currentPassword, existingUser.password_hash)
+    if (!valid) throw new Error('Mật khẩu hiện tại không chính xác.')
+
+    await queryAdminDb(
+      `
+        UPDATE public.admin_users
+        SET email = $2
+        WHERE id = $1
+      `,
+      [existingUser.id, normalizedEmail]
+    )
+
+    return {
+      role: 'admin' as const,
+      userId: existingUser.id,
+      username: existingUser.username,
+      displayName: existingUser.display_name || null,
+      authSource: 'database' as const,
+    }
+  }
+
+  const validEnvPassword = await verifyEnvCredentials(session.username, currentPassword)
+  if (!validEnvPassword) throw new Error('Mật khẩu hiện tại không chính xác.')
+
+  const passwordHash = await bcrypt.hash(currentPassword, 10)
+  const result = await queryAdminDb<{ id: string; username: string; display_name: string | null }>(
+    `
+      INSERT INTO public.admin_users (username, display_name, email, password_hash, is_active)
+      VALUES ($1, $2, $3, $4, true)
+      RETURNING id, username, display_name
+    `,
+    [session.username, session.displayName || 'Quản trị viên', normalizedEmail, passwordHash]
+  )
+
+  const data = result.rows[0]
+
+  return {
+    role: 'admin' as const,
+    userId: data.id,
+    username: data.username,
+    displayName: data.display_name || null,
+    authSource: 'database' as const,
+  }
+}
+
 export function validateUsername(username: string) {
   const normalized = normalizeUsername(username)
   if (!normalized) return 'Tên đăng nhập không được để trống.'
@@ -341,4 +435,4 @@ export function validatePassword(password: string) {
   return ''
 }
 
-export { COOKIE_NAME, ENV_ADMIN_USERNAME }
+export { COOKIE_NAME, ENV_ADMIN_USERNAME, ADMIN_RECOVERY_EMAIL }
