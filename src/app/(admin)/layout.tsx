@@ -1,9 +1,10 @@
 import { headers } from 'next/headers'
 import AdminSidebar from '@/components/admin/AdminSidebar'
 import AdminTopBar from '@/components/admin/AdminTopBar'
+import { isPublicAdminPath } from '@/lib/admin-public-paths'
 
 // Root layout: detect /admin → skip Header/Footer
-// This layout: detect /admin/login → skip sidebar
+// This layout: detect trang công khai (login, quên/đặt lại mật khẩu) → skip sidebar
 export default async function AdminLayout({
   children,
 }: {
@@ -11,10 +12,9 @@ export default async function AdminLayout({
 }) {
   const headersList = await headers()
   const pathname = headersList.get('x-pathname') || ''
-  const isLoginPage = pathname.startsWith('/admin/login')
 
-  // Login page: render without sidebar
-  if (isLoginPage) {
+  // Login / quên mật khẩu / đặt lại mật khẩu: render without sidebar
+  if (isPublicAdminPath(pathname)) {
     return <>{children}</>
   }
 

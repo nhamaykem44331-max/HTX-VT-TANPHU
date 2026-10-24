@@ -39,6 +39,9 @@ interface NewsFormProps {
 function generateSlug(text: string) {
   return text
     .toString()
+    // NFD không tách được đ/Đ nên phải thay tay trước
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()

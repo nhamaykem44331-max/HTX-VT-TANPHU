@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { AlertCircle, KeyRound, Save, ShieldCheck, UserPlus } from 'lucide-react'
+import { AlertCircle, KeyRound, MailCheck, Save, ShieldCheck, UserPlus } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import AdminPageHeader from '@/components/admin/AdminPageHeader'
 
@@ -18,6 +18,7 @@ interface AdminUserItem {
   id: string
   username: string
   displayName: string | null
+  email: string | null
   authSource: 'database' | 'env'
   isActive: boolean
   createdAt: string | null
@@ -44,9 +45,11 @@ export default function SettingsAdminPage() {
   const [accountSuccessMsg, setAccountSuccessMsg] = useState('')
   const [legacyMode, setLegacyMode] = useState(false)
   const [currentUser, setCurrentUser] = useState<CurrentAdminUser | null>(null)
+  const [currentEmail, setCurrentEmail] = useState<string | null>(null)
 
   const [newUsername, setNewUsername] = useState('')
   const [newDisplayName, setNewDisplayName] = useState('')
+  const [newEmail, setNewEmail] = useState('')
   const [newPassword, setNewPassword] = useState('')
   const [newPasswordConfirm, setNewPasswordConfirm] = useState('')
   const [creatingUser, setCreatingUser] = useState(false)
@@ -55,6 +58,10 @@ export default function SettingsAdminPage() {
   const [nextPassword, setNextPassword] = useState('')
   const [nextPasswordConfirm, setNextPasswordConfirm] = useState('')
   const [changingPassword, setChangingPassword] = useState(false)
+
+  const [recoveryEmail, setRecoveryEmail] = useState('')
+  const [recoveryPassword, setRecoveryPassword] = useState('')
+  const [savingRecoveryEmail, setSavingRecoveryEmail] = useState(false)
 
   useEffect(() => {
     fetchSettings()
@@ -107,6 +114,8 @@ export default function SettingsAdminPage() {
       setUsers(result.users || [])
       setCurrentUser(result.currentUser || null)
       setLegacyMode(Boolean(result.legacyMode))
+      setCurrentEmail(result.currentEmail || null)
+      setRecoveryEmail(result.currentEmail || '')
     } catch (error: any) {
       setUsersError(error?.message || 'Không thể tải danh sách tài khoản admin.')
     } finally {
@@ -158,6 +167,7 @@ export default function SettingsAdminPage() {
         body: JSON.stringify({
           username: newUsername,
           displayName: newDisplayName,
+          email: newEmail,
           password: newPassword,
         }),
       })
@@ -169,6 +179,7 @@ export default function SettingsAdminPage() {
 
       setNewUsername('')
       setNewDisplayName('')
+      setNewEmail('')
       setNewPassword('')
       setNewPasswordConfirm('')
       setAccountSuccessMsg('Đã tạo tài khoản admin mới thành công.')
@@ -215,6 +226,37 @@ export default function SettingsAdminPage() {
       setUsersError(error?.message || 'Không thể đổi mật khẩu.')
     } finally {
       setChangingPassword(false)
+    }
+  }
+
+  const handleSaveRecoveryEmail = async (event: React.FormEvent) => {
+    event.preventDefault()
+    setUsersError('')
+    setAccountSuccessMsg('')
+    setSavingRecoveryEmail(true)
+
+    try {
+      const response = await fetch('/api/auth/recovery-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: recoveryEmail,
+          currentPassword: recoveryPassword,
+        }),
+      })
+
+      const result = await response.json()
+      if (!response.ok) {
+        throw new Error(result.error || 'Không thể lưu email khôi phục.')
+      }
+
+      setRecoveryPassword('')
+      setAccountSuccessMsg(result.message || 'Đã lưu email khôi phục.')
+      await fetchUsers()
+    } catch (error: any) {
+      setUsersError(error?.message || 'Không thể lưu email khôi phục.')
+    } finally {
+      setSavingRecoveryEmail(false)
     }
   }
 
@@ -352,6 +394,14 @@ export default function SettingsAdminPage() {
                 {currentUser.displayName || currentUser.username}
               </p>
               <p className="mt-1 text-sm text-gray-600">@{currentUser.username}</p>
+              <p className="mt-1 text-sm text-gray-600">
+                Email khôi phục:{' '}
+                {currentEmail ? (
+                  <span className="font-medium text-gray-900">{currentEmail}</span>
+                ) : (
+                  <span className="text-red-600">chưa đặt — hãy thêm để dùng chức năng quên mật khẩu</span>
+                )}
+              </p>
               <div className="mt-3 flex gap-2">
                 <span className="rounded-full border border-orange-200 bg-orange-50 px-2.5 py-1 text-xs font-medium text-orange-700">
                   {currentUser.authSource === 'database' ? 'Database account' : 'Env fallback'}
@@ -395,7 +445,10 @@ export default function SettingsAdminPage() {
                         </p>
                       ) : null}
                     </div>
-                    <div className="text-gray-600">{user.displayName || 'Chưa đặt tên hiển thị'}</div>
+                    <div className="text-gray-600">
+                      <p>{user.displayName || 'Chưa đặt tên hiển thị'}</p>
+                      <p className="mt-1 text-xs text-gray-500">{user.email || 'Chưa có email khôi phục'}</p>
+                    </div>
                     <div>
                       <span
                         className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${
@@ -442,6 +495,16 @@ export default function SettingsAdminPage() {
                   value={newDisplayName}
                   onChange={(event) => setNewDisplayName(event.target.value)}
                   placeholder="Nguyễn Văn A"
+                  className="admin-input"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email khôi phục (tuỳ chọn)</label>
+                <input
+                  type="email"
+                  value={newEmail}
+                  onChange={(event) => setNewEmail(event.target.value)}
+                  placeholder="ten@gmail.com"
                   className="admin-input"
                 />
               </div>
@@ -524,6 +587,49 @@ export default function SettingsAdminPage() {
               >
                 <KeyRound size={16} />
                 {changingPassword ? 'Đang cập nhật...' : 'Đổi mật khẩu'}
+              </button>
+            </form>
+          </section>
+
+          <section className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+            <div className="mb-4 flex items-start gap-3">
+              <MailCheck className="mt-0.5 text-orange-500" size={20} />
+              <div>
+                <h2 className="font-heading text-xl font-bold text-gray-900">Email khôi phục</h2>
+                <p className="text-sm text-gray-500">
+                  Khi quên mật khẩu, liên kết đặt lại sẽ được gửi tới email này (Gmail hoặc email bất kỳ).
+                </p>
+              </div>
+            </div>
+
+            <form onSubmit={handleSaveRecoveryEmail} className="space-y-4">
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700">Email nhận liên kết</label>
+                <input
+                  type="email"
+                  value={recoveryEmail}
+                  onChange={(event) => setRecoveryEmail(event.target.value)}
+                  placeholder="ten@gmail.com"
+                  className="admin-input"
+                />
+              </div>
+              <div>
+                <label className="mb-1.5 block text-sm font-semibold text-gray-700">Mật khẩu hiện tại (xác nhận)</label>
+                <input
+                  type="password"
+                  value={recoveryPassword}
+                  onChange={(event) => setRecoveryPassword(event.target.value)}
+                  className="admin-input"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={savingRecoveryEmail}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-orange-500 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:opacity-50"
+              >
+                <MailCheck size={16} />
+                {savingRecoveryEmail ? 'Đang lưu...' : 'Lưu email khôi phục'}
               </button>
             </form>
           </section>

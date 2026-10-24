@@ -33,6 +33,9 @@ Mở [http://localhost:3000](http://localhost:3000)
 | `/tin-tuc/[slug]` | Chi tiết bài viết |
 | `/tuyen-dung` | Tuyển dụng + form ứng tuyển |
 | `/lien-he` | Liên hệ + bản đồ |
+| `/admin/login` | Đăng nhập quản trị |
+| `/admin/quen-mat-khau` | Quên mật khẩu: gửi link đặt lại qua email (cần `SMTP_USER`, `SMTP_PASS`, `ADMIN_RECOVERY_EMAIL`, xem `.env.local.example`) |
+| `/admin/dat-lai-mat-khau` | Đặt mật khẩu mới từ link trong email |
 
 ## Thay ảnh thật
 

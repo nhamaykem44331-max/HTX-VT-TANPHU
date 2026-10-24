@@ -84,9 +84,20 @@ export default function Header() {
               <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-2xl border border-gray-200 bg-white p-1 shadow-sm lg:h-auto lg:w-auto lg:rounded-none lg:border-0 lg:bg-transparent lg:p-0 lg:shadow-none">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/logo.png"
-                  alt="Logo HTX Tan Phu"
+                  src="/images/logo-192.png"
+                  alt="Logo HTX Tân Phú"
+                  width={192}
+                  height={192}
+                  decoding="async"
+                  fetchPriority="high"
                   className="h-9 w-auto object-contain lg:h-12"
+                  onError={(event) => {
+                    // Nếu file nhỏ tải lỗi (mạng chập chờn lúc deploy), thử lại bằng file gốc
+                    const img = event.currentTarget;
+                    if (img.dataset.fallback) return;
+                    img.dataset.fallback = "1";
+                    img.src = "/images/logo.png";
+                  }}
                 />
               </div>
 
