@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { cookies } from 'next/headers'
 import { isAdminDatabaseConfigured, queryAdminDb } from '@/lib/admin-db'
+import { UserFacingError } from '@/lib/api-error'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback-dev-secret-change-in-production'
 const COOKIE_NAME = 'htx-admin-token'
@@ -278,12 +279,12 @@ export async function changeAdminPassword(session: AdminSession, currentPassword
   if (session.authSource === 'database' && session.userId) {
     const databaseUser = await getDatabaseAdminByUsername(session.username)
     if (!databaseUser || databaseUser.id !== session.userId) {
-      throw new Error('Tài khoản hiện tại không còn tồn tại trong hệ thống.')
+      throw new UserFacingError('Tài khoản hiện tại không còn tồn tại trong hệ thống.')
     }
 
     const valid = await bcrypt.compare(currentPassword, databaseUser.password_hash)
     if (!valid) {
-      throw new Error('Mật khẩu hiện tại không chính xác.')
+      throw new UserFacingError('Mật khẩu hiện tại không chính xác.')
     }
 
     const passwordHash = await bcrypt.hash(newPassword, 10)
@@ -307,7 +308,7 @@ export async function changeAdminPassword(session: AdminSession, currentPassword
 
   const validEnvPassword = await verifyEnvCredentials(session.username, currentPassword)
   if (!validEnvPassword) {
-    throw new Error('Mật khẩu hiện tại không chính xác.')
+    throw new UserFacingError('Mật khẩu hiện tại không chính xác.')
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 10)
@@ -374,7 +375,7 @@ export async function updateAdminRecoveryEmail(session: AdminSession, currentPas
 
   if (existingUser) {
     const valid = await bcrypt.compare(currentPassword, existingUser.password_hash)
-    if (!valid) throw new Error('Mật khẩu hiện tại không chính xác.')
+    if (!valid) throw new UserFacingError('Mật khẩu hiện tại không chính xác.')
 
     await queryAdminDb(
       `
@@ -395,7 +396,7 @@ export async function updateAdminRecoveryEmail(session: AdminSession, currentPas
   }
 
   const validEnvPassword = await verifyEnvCredentials(session.username, currentPassword)
-  if (!validEnvPassword) throw new Error('Mật khẩu hiện tại không chính xác.')
+  if (!validEnvPassword) throw new UserFacingError('Mật khẩu hiện tại không chính xác.')
 
   const passwordHash = await bcrypt.hash(currentPassword, 10)
   const result = await queryAdminDb<{ id: string; username: string; display_name: string | null }>(

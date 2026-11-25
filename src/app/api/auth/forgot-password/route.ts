@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { SITE_URL } from '@/lib/seo'
 import { requestPasswordReset } from '@/lib/password-reset'
+import { apiErrorResponse } from '@/lib/api-error'
 
 /**
  * Link trong email phải trỏ về đúng tên miền thật. Không lấy theo Host header
@@ -33,11 +34,7 @@ export async function POST(request: NextRequest) {
       // Chỉ trả email đã che khi thật sự gửi, để người dùng biết cần mở hộp thư nào
       maskedEmail: result.sent ? result.maskedEmail : null,
     })
-  } catch (error: any) {
-    console.error('[forgot-password]', error)
-    return NextResponse.json(
-      { error: error?.message || 'Không thể gửi email khôi phục. Vui lòng thử lại sau.' },
-      { status: 500 }
-    )
+  } catch (error) {
+    return apiErrorResponse('auth/forgot-password', error, 'Không thể gửi email khôi phục. Vui lòng thử lại sau.')
   }
 }

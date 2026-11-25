@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { apiErrorResponse } from '@/lib/api-error'
 import {
   changeAdminPassword,
   COOKIE_NAME,
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
     })
 
     return response
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Không thể đổi mật khẩu' }, { status: 500 })
+  } catch (error) {
+    return apiErrorResponse('auth/change-password', error, 'Không thể đổi mật khẩu. Vui lòng thử lại sau.')
   }
 }
