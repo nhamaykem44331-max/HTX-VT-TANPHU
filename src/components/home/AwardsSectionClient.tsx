@@ -1,10 +1,39 @@
 "use client";
 import { useRef } from "react";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { Award as AwardIcon, ChevronLeft, ChevronRight, Flag, Medal, Star, Trophy } from "lucide-react";
 import SectionHeading from "@/components/shared/SectionHeading";
 import ScrollReveal from "@/components/shared/ScrollReveal";
-import ImagePlaceholder from "@/components/shared/ImagePlaceholder";
 import type { Award } from "@/lib/types";
+
+function pickAwardIcon(title: string) {
+  const t = title.toLowerCase();
+  if (t.includes("huân chương")) return Medal;
+  if (t.includes("cờ")) return Flag;
+  if (t.includes("cúp")) return Trophy;
+  return AwardIcon;
+}
+
+/** Thẻ thay cho ảnh khi thành tích chưa có ảnh chụp thật: biểu tượng theo loại + năm nhận. */
+function AwardEmblem({ title, year }: { title: string; year: string }) {
+  const Icon = pickAwardIcon(title);
+  return (
+    <div
+      className="relative flex aspect-[3/4] flex-col items-center justify-center gap-4 overflow-hidden"
+      style={{ background: "linear-gradient(160deg, var(--navy) 0%, var(--navy-dark) 100%)" }}
+      aria-hidden
+    >
+      <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full border border-white/10" />
+      <div className="absolute -bottom-14 -left-8 h-36 w-36 rounded-full border border-white/5" />
+      <div
+        className="flex h-20 w-20 items-center justify-center rounded-full"
+        style={{ backgroundColor: "rgba(227, 120, 58, 0.15)", border: "2px solid var(--orange)" }}
+      >
+        <Icon size={36} className="text-orange-400" strokeWidth={1.75} />
+      </div>
+      {year ? <span className="font-heading text-2xl font-bold tracking-wider text-white/90">{year}</span> : null}
+    </div>
+  );
+}
 
 export default function AwardsSectionClient({ awards }: { awards: Award[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -63,7 +92,14 @@ export default function AwardsSectionClient({ awards }: { awards: Award[] }) {
                 key={award.id}
                 className="flex-shrink-0 w-56 snap-start bg-white rounded-sm shadow-md hover:shadow-xl transition-shadow overflow-hidden border border-gray-100"
               >
-                <ImagePlaceholder label={award.title} className="w-full rounded-none" aspectRatio="portrait" iconSize={28} />
+                {award.image ? (
+                  <div className="aspect-[3/4] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={award.image} alt={award.title} className="h-full w-full object-cover" />
+                  </div>
+                ) : (
+                  <AwardEmblem title={award.title} year={award.year} />
+                )}
                 <div className="p-4 text-center">
                   <p className="font-heading font-bold text-gray-900 text-sm leading-snug mb-1 line-clamp-2">{award.title}</p>
                   <p className="text-orange-500 text-xs font-semibold">{award.issuer}</p>

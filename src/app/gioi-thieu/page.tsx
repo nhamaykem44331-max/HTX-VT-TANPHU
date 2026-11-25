@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { CheckCircle, Eye, Heart, Star, Target } from 'lucide-react'
 import Breadcrumb from '@/components/shared/Breadcrumb'
 import ImagePlaceholder from '@/components/shared/ImagePlaceholder'
+import InitialsAvatar from '@/components/shared/InitialsAvatar'
 import ScrollReveal from '@/components/shared/ScrollReveal'
 import SectionHeading from '@/components/shared/SectionHeading'
 import { getAwards } from '@/lib/data-service'
@@ -213,7 +214,7 @@ export default async function GioiThieuPage() {
                             <img src={leader.image} alt={leader.name} className="h-full w-full object-cover" />
                           </div>
                         ) : (
-                          <ImagePlaceholder label={leader.name} aspectRatio="portrait" className="rounded-none" iconSize={40} />
+                          <InitialsAvatar name={leader.name} />
                         )}
 
                         <div className="p-5">

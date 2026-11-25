@@ -31,7 +31,16 @@ export default async function NewsSection() {
           <ScrollReveal delay={0.1} className="lg:col-span-3">
             <Link href={`/tin-tuc/${displayFeatured.slug}`} className="group block bg-white rounded-sm overflow-hidden shadow-sm hover:shadow-xl transition-shadow">
               <div className="overflow-hidden">
-                <ImagePlaceholder label={displayFeatured.title} className="w-full rounded-none group-hover:scale-105 transition-transform duration-500" aspectRatio="video" />
+                {displayFeatured.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={displayFeatured.image}
+                    alt={displayFeatured.title}
+                    className="w-full aspect-video object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <ImagePlaceholder label={displayFeatured.title} className="w-full rounded-none group-hover:scale-105 transition-transform duration-500" aspectRatio="video" />
+                )}
               </div>
               <div className="p-6">
                 <span className="inline-block px-3 py-1 rounded-sm text-xs font-semibold text-white mb-3" style={{ backgroundColor: "var(--orange)" }}>
@@ -72,7 +81,12 @@ export default async function NewsSection() {
                   className="group flex gap-4 bg-white rounded-sm p-4 shadow-sm hover:shadow-md transition-shadow"
                 >
                   <div className="flex-shrink-0 w-20 h-20 rounded-sm overflow-hidden">
-                    <ImagePlaceholder label="" className="w-20 h-20 rounded-none" aspectRatio="square" iconSize={20} />
+                    {article.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={article.image} alt={article.title} className="w-20 h-20 object-cover" />
+                    ) : (
+                      <ImagePlaceholder label="" className="w-20 h-20 rounded-none" aspectRatio="square" iconSize={20} />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <span className="text-xs text-orange-500 font-semibold">{article.category}</span>
