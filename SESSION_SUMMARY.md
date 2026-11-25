@@ -44,10 +44,11 @@ Ket qua:
 
 Luu y quan trong:
 - Khi set env tren Windows cho Vercel, uu tien `cmd /c ... --value ...`
-- Neu `ADMIN_PASSWORD_HASH` bi dinh newline, login production se loi
-- Production hien dang chay on dinh voi fallback admin:
-  - username: `admin`
-  - password: `admin123`
+- `ADMIN_PASSWORD_HASH` da duoc `.trim()` trong code, newline thua khong con lam hong login
+- Fallback `admin/admin123` DA BI BO khoi code. Truoc khi deploy ban moi len production phai co
+  it nhat mot tai khoan trong bang `admin_users` (hoac set `ADMIN_PASSWORD_HASH`), neu khong se
+  khong dang nhap duoc admin.
+- Username admin gio chap nhan ca dia chi email (vd `ten@email.com`)
 
 ## 3. Sua loi upload anh
 

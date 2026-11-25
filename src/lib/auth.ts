@@ -85,8 +85,12 @@ export async function getDatabaseAdminByEmail(email: string): Promise<AdminUserR
 export async function verifyEnvCredentials(username: string, password: string): Promise<boolean> {
   if (normalizeUsername(username) !== ENV_ADMIN_USERNAME) return false
 
-  const passwordHash = process.env.ADMIN_PASSWORD_HASH || ''
-  if (!passwordHash) return password === 'admin123'
+  // Khong co mat khau mac dinh: neu chua cau hinh ADMIN_PASSWORD_HASH thi
+  // duong dang nhap bang env bi vo hieu, chi con tai khoan trong admin_users.
+  // .trim() de tranh loi hash bi dinh \r\n khi set env tren Windows
+  // (xem DEPLOY_CHECKLIST.md muc 6).
+  const passwordHash = (process.env.ADMIN_PASSWORD_HASH || '').trim()
+  if (!passwordHash) return false
   return bcrypt.compare(password, passwordHash)
 }
 
@@ -418,11 +422,15 @@ export async function updateAdminRecoveryEmail(session: AdminSession, currentPas
   }
 }
 
+const HANDLE_PATTERN = /^[a-z0-9._-]{3,32}$/
+const EMAIL_PATTERN = /^[a-z0-9._%+-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/
+
 export function validateUsername(username: string) {
   const normalized = normalizeUsername(username)
   if (!normalized) return 'Tên đăng nhập không được để trống.'
-  if (!/^[a-z0-9._-]{3,32}$/.test(normalized)) {
-    return 'Tên đăng nhập chỉ gồm chữ thường, số, dấu chấm, gạch dưới hoặc gạch ngang (3-32 ký tự).'
+  if (normalized.length > 254) return 'Tên đăng nhập quá dài (tối đa 254 ký tự).'
+  if (!HANDLE_PATTERN.test(normalized) && !EMAIL_PATTERN.test(normalized)) {
+    return 'Tên đăng nhập là email, hoặc chỉ gồm chữ thường, số, dấu chấm, gạch dưới hoặc gạch ngang (3-32 ký tự).'
   }
   return ''
 }
