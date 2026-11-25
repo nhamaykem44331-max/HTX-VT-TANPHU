@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'crypto'
 import bcrypt from 'bcryptjs'
 import { isAdminDatabaseConfigured, queryAdminDb } from '@/lib/admin-db'
+import { UserFacingError } from '@/lib/api-error'
 import {
   ADMIN_RECOVERY_EMAIL,
   ENV_ADMIN_USERNAME,
@@ -245,7 +246,7 @@ export async function getValidPasswordReset(token: string): Promise<PasswordRese
 export async function resetPasswordWithToken(token: string, newPassword: string) {
   const reset = await getValidPasswordReset(token)
   if (!reset) {
-    throw new Error('Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.')
+    throw new UserFacingError('Liên kết đặt lại mật khẩu không hợp lệ hoặc đã hết hạn. Vui lòng yêu cầu lại.')
   }
 
   const passwordHash = await bcrypt.hash(newPassword, 10)

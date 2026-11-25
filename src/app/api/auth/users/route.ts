@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { apiErrorResponse } from '@/lib/api-error'
 import {
   ADMIN_RECOVERY_EMAIL,
   createDatabaseAdminUser,
@@ -48,8 +49,8 @@ export async function GET() {
       legacyMode: session.authSource === 'env',
       databaseConfigured: isAdminDatabaseConfigured(),
     })
-  } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Không thể tải danh sách tài khoản' }, { status: 500 })
+  } catch (error) {
+    return apiErrorResponse('auth/users:GET', error, 'Không thể tải danh sách tài khoản. Vui lòng thử lại sau.')
   }
 }
 
@@ -97,6 +98,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Tên đăng nhập hoặc email này đã tồn tại.' }, { status: 409 })
     }
 
-    return NextResponse.json({ error: error?.message || 'Không thể tạo tài khoản mới' }, { status: 500 })
+    return apiErrorResponse('auth/users:POST', error, 'Không thể tạo tài khoản mới. Vui lòng thử lại sau.')
   }
 }

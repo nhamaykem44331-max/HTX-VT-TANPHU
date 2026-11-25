@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { apiErrorResponse } from '@/lib/api-error'
 import {
   COOKIE_NAME,
   createToken,
@@ -58,6 +59,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email này đã được dùng cho tài khoản khác.' }, { status: 409 })
     }
 
-    return NextResponse.json({ error: error?.message || 'Không thể lưu email khôi phục' }, { status: 500 })
+    return apiErrorResponse('auth/recovery-email', error, 'Không thể lưu email khôi phục. Vui lòng thử lại sau.')
   }
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { validatePassword } from '@/lib/auth'
 import { getValidPasswordReset, resetPasswordWithToken } from '@/lib/password-reset'
+import { apiErrorResponse } from '@/lib/api-error'
 
 /** Kiểm tra token còn hiệu lực để trang đặt lại mật khẩu hiển thị đúng trạng thái. */
 export async function GET(request: NextRequest) {
@@ -16,9 +17,8 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({ valid: true, username: reset.username })
-  } catch (error: any) {
-    console.error('[reset-password:GET]', error)
-    return NextResponse.json({ valid: false, error: error?.message || 'Lỗi server' }, { status: 500 })
+  } catch (error) {
+    return apiErrorResponse('auth/reset-password:GET', error, 'Lỗi hệ thống. Vui lòng thử lại sau.', { valid: false })
   }
 }
 
@@ -49,8 +49,7 @@ export async function POST(request: NextRequest) {
       username: result.username,
       message: 'Đã đặt lại mật khẩu thành công. Hãy đăng nhập bằng mật khẩu mới.',
     })
-  } catch (error: any) {
-    console.error('[reset-password:POST]', error)
-    return NextResponse.json({ error: error?.message || 'Không thể đặt lại mật khẩu' }, { status: 400 })
+  } catch (error) {
+    return apiErrorResponse('auth/reset-password:POST', error, 'Không thể đặt lại mật khẩu. Vui lòng thử lại sau.')
   }
 }
